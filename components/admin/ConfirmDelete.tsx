@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { buttonClass, SubmitButton } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
+import { buttonClass } from "./buttonClass";
 
 /**
  * Hapus selalu lewat konfirmasi (design.md §8.2). `action` adalah server action

@@ -7,9 +7,10 @@ import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import { saveEvent } from "@/lib/actions/events";
 import { slugify } from "@/lib/slugify";
 import type { EventStatus, MediaAsset } from "@/lib/types";
+import { buttonClass } from "./buttonClass";
 import { FormCheckbox, FormField, inputClass } from "./FormField";
 import { ImagePicker } from "./ImagePicker";
-import { SubmitButton, buttonClass } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 export interface EventFormValues {
   id: string;

@@ -5,7 +5,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { MEDIA_MAX_BYTES, isAllowedImageType } from "@/lib/media";
 import { uploadMediaFile } from "@/lib/media-client";
 import { FormField, inputClass } from "./FormField";
-import { buttonClass } from "./SubmitButton";
+import { buttonClass } from "./buttonClass";
 
 /** Pesan gagal yang sama untuk semua jalur validasi klien. */
 const TYPE_ERROR = "Format harus JPEG, PNG, atau WebP.";

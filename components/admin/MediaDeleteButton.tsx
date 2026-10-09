@@ -1,7 +1,8 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { buttonClass, SubmitButton } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
+import { buttonClass } from "./buttonClass";
 import { deleteMediaAsset } from "@/lib/actions/media";
 import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 

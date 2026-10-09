@@ -12,8 +12,16 @@ type NewsDetailProps = PageProps<"/news/[slug]">;
 // untuk memutuskan 404, jadi navigasi diizinkan memblokir (Next.js `instant`).
 export const instant = false;
 
+// Cache Components mewajibkan minimal satu param di sini. Bila CMS belum punya
+// artikel published, slug placeholder dipakai hanya agar build lolos; halaman
+// tetap membalas 404 lewat notFound() (docs/messages/empty-generate-static-params).
+const PLACEHOLDER_SLUG = "__placeholder__";
+
 export async function generateStaticParams() {
   const articles = await getPublishedNews();
+  if (articles.length === 0) {
+    return [{ slug: PLACEHOLDER_SLUG }];
+  }
   return articles.map((article) => ({ slug: article.slug }));
 }
 

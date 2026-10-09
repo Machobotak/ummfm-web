@@ -6,9 +6,10 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { savePlaylist } from "@/lib/actions/playlists";
 import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import type { MediaAsset } from "@/lib/types";
+import { buttonClass } from "./buttonClass";
 import { FormCheckbox, FormField, inputClass } from "./FormField";
 import { ImagePicker } from "./ImagePicker";
-import { SubmitButton, buttonClass } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 export interface PlaylistFormValues {
   id: string;

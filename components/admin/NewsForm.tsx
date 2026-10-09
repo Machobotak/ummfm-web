@@ -7,10 +7,11 @@ import { slugify } from "@/lib/slugify";
 import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import { saveNews } from "@/lib/actions/news";
 import type { ContentStatus, MediaAsset } from "@/lib/types";
+import { buttonClass } from "./buttonClass";
 import { FormField, inputClass } from "./FormField";
 import { ImagePicker } from "./ImagePicker";
 import { MarkdownEditor } from "./MarkdownEditor";
-import { SubmitButton, buttonClass } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 export interface NewsFormValues {
   id: string;

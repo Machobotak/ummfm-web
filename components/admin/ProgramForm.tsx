@@ -7,9 +7,10 @@ import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import { saveProgram } from "@/lib/actions/programs";
 import { slugify } from "@/lib/slugify";
 import type { MediaAsset } from "@/lib/types";
+import { buttonClass } from "./buttonClass";
 import { FormCheckbox, FormField, inputClass } from "./FormField";
 import { ImagePicker } from "./ImagePicker";
-import { SubmitButton, buttonClass } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 export interface ProgramFormValues {
   id: string;

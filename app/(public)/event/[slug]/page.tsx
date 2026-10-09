@@ -10,8 +10,15 @@ import { absoluteUrl, formatEventPeriod } from "@/lib/format";
 // jadi segmen ini diizinkan memblokir saat navigasi.
 export const instant = false;
 
+// Lihat catatan di /news/[slug]: placeholder menjaga build tetap jalan saat
+// belum ada event published, dan slug itu berakhir 404.
+const PLACEHOLDER_SLUG = "__placeholder__";
+
 export async function generateStaticParams() {
   const events = await getPublishedEvents();
+  if (events.length === 0) {
+    return [{ slug: PLACEHOLDER_SLUG }];
+  }
   return events.map((event) => ({ slug: event.slug }));
 }
 

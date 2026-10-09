@@ -7,8 +7,9 @@ import { saveSchedule } from "@/lib/actions/schedules";
 import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import type { Program } from "@/lib/types";
 import { WEEKDAY_NAMES_ID, WEEK_ORDER } from "@/lib/weekdays";
+import { buttonClass } from "./buttonClass";
 import { FormCheckbox, FormField, inputClass } from "./FormField";
-import { SubmitButton, buttonClass } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 export interface ScheduleFormValues {
   id: string;

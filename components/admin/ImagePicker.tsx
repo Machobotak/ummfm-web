@@ -6,7 +6,7 @@ import { CardImage } from "@/components/ui/CardImage";
 import { uploadMediaFile } from "@/lib/media-client";
 import type { MediaAsset } from "@/lib/types";
 import { FormField, inputClass } from "./FormField";
-import { buttonClass } from "./SubmitButton";
+import { buttonClass } from "./buttonClass";
 
 /**
  * Pemilih gambar: pakai aset yang sudah ada di Media Library atau unggah baru

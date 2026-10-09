@@ -6,8 +6,9 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import { saveSettings } from "@/lib/actions/settings";
 import type { SiteSettings } from "@/lib/types";
+import { buttonClass } from "./buttonClass";
 import { FormField, inputClass } from "./FormField";
-import { SubmitButton, buttonClass } from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 interface SocialLinkRow {
   platform: string;

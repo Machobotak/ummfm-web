@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
 import { DataTable, type Column } from "@/components/admin/DataTable";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { buttonClass } from "@/components/admin/SubmitButton";
+import { buttonClass } from "@/components/admin/buttonClass";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { deletePlaylist } from "@/lib/actions/playlists";
 import { listPlaylists } from "@/lib/admin/data";

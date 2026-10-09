@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { ScheduleBoard } from "@/components/admin/ScheduleBoard";
-import { buttonClass } from "@/components/admin/SubmitButton";
+import { buttonClass } from "@/components/admin/buttonClass";
 import { listPrograms, listSchedules } from "@/lib/admin/data";
 import { findScheduleConflicts } from "@/lib/schedule";
 

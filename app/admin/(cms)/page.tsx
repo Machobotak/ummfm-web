@@ -2,7 +2,7 @@ import { connection } from "next/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { buttonClass } from "@/components/admin/SubmitButton";
+import { buttonClass } from "@/components/admin/buttonClass";
 import { dashboardStats } from "@/lib/admin/data";
 import { formatDate, formatTime } from "@/lib/format";
 

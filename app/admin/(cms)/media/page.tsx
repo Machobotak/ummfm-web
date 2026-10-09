@@ -5,7 +5,7 @@ import { MediaDeleteButton } from "@/components/admin/MediaDeleteButton";
 import { FormField, inputClass } from "@/components/admin/FormField";
 import { MediaUploader } from "@/components/admin/MediaUploader";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { buttonClass } from "@/components/admin/SubmitButton";
+import { buttonClass } from "@/components/admin/buttonClass";
 import { CardImage } from "@/components/ui/CardImage";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { listMedia, mediaUsage } from "@/lib/admin/data";

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { ProgramForm } from "@/components/admin/ProgramForm";
 import { ScheduleBoard } from "@/components/admin/ScheduleBoard";
-import { buttonClass } from "@/components/admin/SubmitButton";
+import { buttonClass } from "@/components/admin/buttonClass";
 import { getProgram, listMedia, listSchedules } from "@/lib/admin/data";
 import { findScheduleConflicts } from "@/lib/schedule";
 
