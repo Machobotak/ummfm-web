@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Website Publik 93.4 UMMFM
 
-## Getting Started
+Situs publik radio kampus 93.4 UMMFM (The Real Campus Radio) plus dashboard CMS-nya —
+Next.js App Router, Supabase (Postgres + Auth + Storage) sebagai backend.
+Tanpa kredensial Supabase, situs publik tetap jalan memakai konten mock bertipe di `lib/data.ts`.
 
-First, run the development server:
+Referensi: `PRD_Website_Streaming_Radio_UMMFM.md`, `design.md`, `BUILD_WEBSITE_PUBLIK_934_UMMFM_PLAN.md`,
+`SUPABASE_CMS_INTEGRATION_PLAN.md`.
+
+## Menjalankan
+
+Node ≥ 18.18 (diuji pada Node 26).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # build produksi (compiler + typecheck)
+npm run lint
+npm run typecheck
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Konfigurasi
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variabel | Fungsi |
+|---|---|
+| `NEXT_PUBLIC_STREAM_URL` | Mount audio SHOUTcast. Fallback bila `site_settings.stream_url` kosong. |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL project Supabase. Kosong → seluruh situs memakai konten mock. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Kunci publik (anon) untuk login dan unggah media dari browser. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Kunci service role, **hanya server** (baca konten publik, tulis CMS, Storage). |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`.env.local` berisi nilai nyata (tidak di-commit); `.env.example` dokumentasi (di-commit).
+Nilai `NEXT_PUBLIC_STREAM_URL` kosong membuat player langsung berada pada status `error`
+beserta tombol "Coba lagi".
 
-## Learn More
+## Struktur
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/                    publik: /, /news, /news/[slug], /about, /event, /event/[slug],
+                        /program, /playlist — di dalam route group `(public)`
+app/admin/login/        login CMS (tanpa chrome publik)
+app/admin/(cms)/        dashboard CMS: /admin, programs, schedules, playlists, news,
+                        events, media, settings, users
+components/ui/          primitif: Container, CardImage, MediaPlaceholder, SectionHeading,
+                        EmptyState, ErrorState, LoadingSkeleton, OnAirBadge, StatusBadge
+components/player/      RadioPlayerProvider (state, satu elemen <audio>), LiveRadioPlayer,
+                        ActiveProgramBar (server: jadwal per request)
+components/site/        SiteHeader, MobileNavigation, SiteFooter
+components/home/        section halaman Home
+components/content/     kartu konten: ProgramCard, ScheduleList, PlaylistCard,
+                        NewsCard, FeaturedNewsCard, EventCard
+lib/types.ts            tipe konten (mengikuti PRD §11)
+lib/data.ts             mock konten (semua gambar "" → MediaPlaceholder)
+lib/content.ts          seam baca publik (cache + fallback mock) untuk halaman/komponen
+lib/admin/data.ts       bacaan dashboard CMS (tanpa cache, di belakang auth)
+lib/actions/            server action tulis (programs, schedules, playlists, news, events,
+                        settings, media, users, auth) — semuanya `requireRole` + zod
+lib/supabase/           klien Supabase (admin/server/browser), mapper baris, skema settings
+lib/schedule.ts         jadwal aktif/berikutnya menurut jam Asia/Jakarta
+lib/format.ts           format tanggal/jam id-ID + zona WIB
+lib/stream.ts, lib/site.ts
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Backend Supabase (CMS)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Buat project Supabase, lalu jalankan `supabase/migrations/0001_init.sql` di SQL Editor.
+2. (Opsional) jalankan `supabase/seed.sql` — berisi konten yang sama dengan mock `lib/data.ts`.
+3. Isi `.env.local` (lihat tabel di atas), lalu buat akun admin pertama lewat
+   Dashboard Supabase → Authentication → Users, dan set `profiles.role = 'admin'`.
+4. Buka `/admin/login`. Role `editor` boleh mengelola konten; role `admin` juga mengelola
+   Pengguna. Akun dengan `profiles.is_active = false` tidak bisa masuk.
 
-## Deploy on Vercel
+`lib/content.ts` adalah satu-satunya seam baca untuk situs publik: tiap getter memakai
+`"use cache"` + `cacheTag`, memilih Supabase bila env terisi dan mock bila tidak, sehingga
+call site tidak perlu berubah. Mutasi dari CMS memanggil `updateTag(<tag konten>)` supaya
+perubahan langsung terlihat di situs publik tanpa redeploy. Aset gambar dari Supabase Storage
+ditambahkan otomatis ke `images.remotePatterns` (`next.config.ts`) dari host
+`NEXT_PUBLIC_SUPABASE_URL`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Catatan teknis
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Cache Components** (`cacheComponents: true`) aktif. Data runtime — `new Date()` — hanya
+  dipakai untuk jadwal: di dalam `getRequestNow()` (`connection()` + `<Suspense>`), jadi
+  halaman lain tetap statis dan navigasi instan.
+- **Halaman detail** (`/news/[slug]`, `/event/[slug]`) memakai `instant = false` karena
+  `params` dibaca untuk memutuskan `notFound()`. Konsekuensinya sesuai Next.js: slug tak
+  dikenal yang pertama kali diminta (cache dingin) dibalas `200` + `<meta name="robots"
+  content="noindex">` sambil tetap menampilkan halaman 404, dan permintaan berikutnya `404`.
+- **Player**: tanpa autoplay, satu elemen `<audio>` untuk seluruh situs, status koneksi
+  terpisah dari status jadwal ("on air" per jadwal ≠ stream tersedia).
+- **Jadwal** mendukung slot lintas tengah malam (`endTime <= startTime`) dan dihitung
+  memakai jam dinding `Asia/Jakarta`.
+- **Dashboard** berada di route group `app/admin/(cms)/` dengan `app/admin/login` di luarnya:
+  layout `(cms)` menjaga seluruh halaman CMS (`getCurrentUser()` → redirect `/admin/login`),
+  dan halaman `/admin/login` tidak bisa ikut terjaga oleh layout yang sama tanpa loop.
+  Seluruh halaman CMS memanggil `await connection()` di awal render: data CMS harus segar
+  saat request, bukan hasil prerender.
+- **Invalidasi cache** memakai `updateTag` (bukan `revalidateTag`): perubahan dari CMS
+  langsung kedaluwarsa dan tampil pada render berikutnya di roundtrip yang sama.
+- Tanpa aset gambar eksternal pada fase mock: semua URL gambar `""` sehingga
+  `MediaPlaceholder` yang tampil.
