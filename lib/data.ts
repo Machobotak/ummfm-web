@@ -3,7 +3,6 @@
 // (design.md §10: placeholder konsisten, tanpa aset pihak ketiga di fase ini).
 import type {
   NewsArticle,
-  Playlist,
   Program,
   ProgramSchedule,
   RadioEvent,
@@ -140,39 +139,6 @@ export const mockSchedules: ProgramSchedule[] = [
     hostName: "Host F",
     timezone: "Asia/Jakarta",
     isActive: true,
-  },
-];
-
-export const mockPlaylists: Playlist[] = [
-  {
-    id: "pl-1",
-    title: "Playlist Pilihan #1",
-    description: "Kompilasi lagu favorit penyiar UMMFM.",
-    coverImageUrl: "",
-    externalUrl: "https://open.spotify.com/playlist/5Q9mUp6OA60CbDEqEjpJ07",
-    sortOrder: 1,
-    isPublished: true,
-    updatedAt: CONTENT_UPDATED_AT,
-  },
-  {
-    id: "pl-2",
-    title: "Playlist Pilihan #2",
-    description: "Rekomendasi rilisan terbaru untuk menemani aktivitas.",
-    coverImageUrl: "",
-    externalUrl: "https://open.spotify.com/playlist/4OjmZ6nwO3HIWWR970Rb52",
-    sortOrder: 2,
-    isPublished: true,
-    updatedAt: CONTENT_UPDATED_AT,
-  },
-  {
-    id: "pl-3",
-    title: "Playlist Pilihan #3",
-    description: "Pilihan musik indie lokal dan nasional.",
-    coverImageUrl: "",
-    externalUrl: "https://open.spotify.com/playlist/6A22UhQ1kGKmcBTefgQjmH",
-    sortOrder: 3,
-    isPublished: true,
-    updatedAt: CONTENT_UPDATED_AT,
   },
 ];
 
@@ -343,4 +309,6 @@ export const mockSiteSettings: SiteSettings = {
     title: `${STATION_NAME} — ${TAGLINE}`,
     description: SITE_DESCRIPTION,
   },
+  playlistEmbeds: [],
+  chartEmbeds: [],
 };

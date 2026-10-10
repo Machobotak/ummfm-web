@@ -68,7 +68,7 @@ export default async function AdminMediaPage({
     <>
       <PageHeader
         title="Media"
-        description="Semua gambar yang bisa dipakai program, berita, event, dan playlist."
+        description="Semua gambar yang bisa dipakai program, berita, dan event."
       />
 
       <MediaUploader />

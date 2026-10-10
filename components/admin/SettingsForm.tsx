@@ -87,11 +87,11 @@ export function SettingsForm({
 
         <ImagePicker
           name="heroBannerUrl"
-          label="Banner hero (16:9)"
+          label="Banner hero (12:5)"
           initialUrl={initial.heroBannerUrl}
           media={media}
           error={errors.heroBannerUrl}
-          hint="Tampil di samping teks hero pada Home. Kosongkan untuk hero tanpa gambar."
+          hint="Mulai 1024 px tampil sebagai latar penuh hero; di layar kecil tampil utuh dengan teks di bawahnya. Kosongkan untuk hero tanpa gambar."
         />
 
         <FormField
@@ -125,6 +125,48 @@ export function SettingsForm({
             placeholder="https://stream.example.com/live"
             aria-invalid={Boolean(errors.streamUrl)}
             className={inputClass(errors.streamUrl)}
+          />
+        </FormField>
+      </section>
+
+      <section className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5">
+        <div>
+          <h2 className="text-lg font-semibold">UMMFM on Music&apos;s</h2>
+          <p className="text-sm text-ink-700">
+            Isi seksi dua tab di Home dan halaman Playlist. Satu link embed per baris, hanya
+            Spotify (open.spotify.com) dan Instagram (instagram.com).
+          </p>
+        </div>
+
+        <FormField
+          label="Tab Playlist"
+          htmlFor="settings-playlist-embeds"
+          error={errors.playlistEmbeds}
+          hint="Contoh: https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M"
+        >
+          <textarea
+            id="settings-playlist-embeds"
+            name="playlistEmbeds"
+            rows={4}
+            defaultValue={initial.playlistEmbeds.join("\n")}
+            aria-invalid={Boolean(errors.playlistEmbeds)}
+            className={inputClass(errors.playlistEmbeds)}
+          />
+        </FormField>
+
+        <FormField
+          label="Tab Chart"
+          htmlFor="settings-chart-embeds"
+          error={errors.chartEmbeds}
+          hint="Contoh: https://www.instagram.com/p/xxxxxxxxxxx"
+        >
+          <textarea
+            id="settings-chart-embeds"
+            name="chartEmbeds"
+            rows={4}
+            defaultValue={initial.chartEmbeds.join("\n")}
+            aria-invalid={Boolean(errors.chartEmbeds)}
+            className={inputClass(errors.chartEmbeds)}
           />
         </FormField>
       </section>

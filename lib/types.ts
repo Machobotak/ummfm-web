@@ -30,17 +30,6 @@ export interface ProgramSchedule {
   isActive: boolean;
 }
 
-export interface Playlist {
-  id: string;
-  title: string;
-  description: string;
-  coverImageUrl: string;
-  externalUrl: string;
-  sortOrder: number;
-  isPublished: boolean;
-  updatedAt: string;
-}
-
 export interface NewsArticle {
   id: string;
   title: string;
@@ -101,6 +90,10 @@ export interface SiteSettings {
   /** URL siaran dari CMS; undefined → pakai NEXT_PUBLIC_STREAM_URL (lib/stream.ts). */
   streamUrl?: string;
   seo: SeoSettings;
+  /** Link embed Spotify/Instagram tab Playlist di seksi "UMMFM ON MUSIC'S"; satu entri = satu link. */
+  playlistEmbeds: string[];
+  /** Link embed Spotify/Instagram tab Chart di seksi "UMMFM ON MUSIC'S"; satu entri = satu link. */
+  chartEmbeds: string[];
 }
 
 export interface MediaAsset {

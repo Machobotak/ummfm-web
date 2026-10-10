@@ -3,7 +3,6 @@ import { CACHE_TAGS } from "./cache-tags";
 import {
   mockEvents,
   mockNews,
-  mockPlaylists,
   mockPrograms,
   mockSchedules,
   mockSiteSettings,
@@ -11,12 +10,11 @@ import {
 import { LIVE_CHAT_PUBLIC_LIMIT } from "./live-chat";
 import { getAdmin } from "./supabase/admin";
 import { isSupabaseConfigured } from "./supabase/config";
-import { mapEvent, mapLiveMessage, mapNews, mapPlaylist, mapProgram, mapSchedule } from "./supabase/mappers";
+import { mapEvent, mapLiveMessage, mapNews, mapProgram, mapSchedule } from "./supabase/mappers";
 import type {
   EventRow,
   LiveMessageRow,
   NewsRow,
-  PlaylistRow,
   ProgramRow,
   ScheduleRow,
   SettingRow,
@@ -25,7 +23,6 @@ import { assembleSiteSettings } from "./supabase/settings-schema";
 import type {
   LiveMessage,
   NewsArticle,
-  Playlist,
   Program,
   ProgramSchedule,
   RadioEvent,
@@ -150,26 +147,6 @@ export async function getSchedules(): Promise<ProgramSchedule[]> {
     .order("start_time");
   if (error) throw error;
   return ((data ?? []) as ScheduleRow[]).map(mapSchedule);
-}
-
-export async function getPlaylists(): Promise<Playlist[]> {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(CACHE_TAGS.playlists);
-
-  if (!isSupabaseConfigured()) {
-    return mockPlaylists
-      .filter((playlist) => playlist.isPublished)
-      .sort((a, b) => a.sortOrder - b.sortOrder);
-  }
-
-  const { data, error } = await getAdmin()
-    .from("playlists")
-    .select("*")
-    .eq("is_published", true)
-    .order("sort_order", { ascending: true });
-  if (error) throw error;
-  return ((data ?? []) as PlaylistRow[]).map(mapPlaylist);
 }
 
 /** Setelan situs disusun dari baris `site_settings` (key → value jsonb). */

@@ -185,7 +185,7 @@ Urutan section yang disarankan:
 2. Hero identitas UMMFM.
 3. Live Radio Player + program On Air.
 4. Program dan jadwal siaran.
-5. Playlist pilihan.
+5. UMMFM on Music's — embed playlist dan chart.
 6. Berita terbaru.
 7. Event mendatang.
 8. Konten sosial media (opsional).
@@ -265,15 +265,21 @@ Jangan mengklaim radio sedang live hanya karena ada jadwal aktif; status jadwal 
 - Data dan gambar berasal dari CMS, bukan hard-coded.
 - Ketika jadwal berganti, konten yang relevan berubah berdasarkan waktu `Asia/Jakarta`.
 
-### 6.4 Playlist
+### 6.4 UMMFM on Music's (embed playlist dan chart)
 
-- Desktop: grid tiga kolom.
-- Tablet: dua kolom.
-- Mobile: satu kolom atau carousel horizontal jika nyaman digunakan.
-- Setiap kartu menampilkan cover, judul playlist, deskripsi singkat, dan tombol “Buka playlist”.
-- Cover memiliki rasio 1:1.
-- Gunakan embed Spotify hanya jika perlu; berikan fallback berupa link ketika embed gagal.
-- Hindari menampilkan terlalu banyak kontrol embed yang membuat layout berat.
+- Seksi berisi dua tab: “Playlist” dan “Chart”; hanya satu tab yang aktif pada satu waktu dan
+  tab yang tidak aktif tidak ikut dimuat.
+- Isi seksi adalah embed Spotify dan Instagram; tidak ada kartu cover atau unggahan gambar.
+- Pengelola menempelkan link di CMS → Pengaturan: satu link embed per baris, hanya link
+  `open.spotify.com` (playlist, album, track, artist, episode, show) dan `instagram.com`
+  (`p`, `reel`, `tv`) yang diterima. Link dinormalkan ke bentuk `/embed/…` sebelum masuk iframe.
+- Desktop: grid tiga kolom. Tablet: dua kolom. Mobile: satu kolom. Instagram dibatasi
+  `max-w-[400px]` dan ditengahkan karena kirimannya berbentuk potret.
+- Tinggi iframe tetap: Spotify 480 px, Instagram 620 px; `loading="lazy"` supaya halaman
+  ringan meski embed banyak.
+- Setiap embed disertai tautan “Buka di Spotify/Instagram” sebagai jalan keluar bila iframe
+  diblokir jaringan pengunjung.
+- Tanpa link tersimpan, seksi menampilkan empty state yang mengarahkan pengelola ke Pengaturan.
 
 ### 6.5 News
 
@@ -364,7 +370,7 @@ Menu yang disarankan:
 - Dashboard
 - Program
 - Jadwal Siaran
-- Playlist
+- UMMFM on Music's (diatur di menu Pengaturan)
 - News
 - Event
 - Media Library
@@ -441,7 +447,8 @@ Komponen yang sebaiknya reusable:
 - `OnAirBadge`
 - `ProgramCard`
 - `ScheduleList`
-- `PlaylistCard`
+- `MusicSection`
+- `MusicTabs`
 - `NewsCard`
 - `FeaturedNewsCard`
 - `EventCard`
@@ -477,7 +484,6 @@ Hindari menyalin struktur dan styling kartu yang sama ke banyak file; gunakan ko
 |---|---|---|
 | Hero visual | 12:5 (mis. 2048×853) | Di desktop tinggi hero mengikuti lebar; rasio lain dipotong di sisi terpanjang |
 | Cover program | 4:5 atau 3:4 | Cocok untuk artwork poster program |
-| Cover playlist | 1:1 | Cocok untuk album/playlist |
 | Thumbnail berita | 16:9 | Konsisten di grid berita |
 | Poster event | 3:4 | Cocok untuk poster vertikal |
 | Avatar penyiar | 1:1 | Gunakan crop wajah yang wajar |
@@ -536,7 +542,7 @@ Gunakan motion seperlunya:
 - Hero lebih ringkas; CTA tidak memenuhi seluruh layar.
 - Hero menampilkan banner utuh (kotak rasio 12:5) dengan teks di bawahnya, tanpa bagian terpotong.
 - Player tetap mudah diakses dan tidak menutupi konten.
-- Playlist dapat ditampilkan sebagai daftar atau carousel yang dapat di-scroll.
+- Playlist dan chart tampil sebagai dua tab berisi embed Spotify/Instagram, satu kolom di mobile.
 - Menu navigasi memakai drawer/dropdown.
 - Dashboard menggunakan drawer untuk sidebar dan form satu kolom.
 
@@ -622,7 +628,7 @@ Token ini merupakan titik awal, bukan aturan yang tidak boleh diubah. Simpan tok
 - [ ] Hero memiliki satu pesan utama dan CTA yang jelas.
 - [ ] Player punya state idle, connecting, playing, dan error.
 - [ ] Program aktif dan artwork diambil dari data CMS.
-- [ ] Grid playlist, berita, dan event memiliki rasio gambar yang konsisten.
+- [ ] Grid berita dan event memiliki rasio gambar yang konsisten.
 - [ ] Halaman News, About, dan Event memiliki empty state.
 - [ ] Footer memiliki link yang benar.
 - [ ] Semua halaman diuji di mobile, tablet, dan desktop.

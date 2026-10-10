@@ -10,7 +10,6 @@ export const metadata: Metadata = { title: "Dashboard" };
 
 const TYPE_LABEL = {
   program: "Program",
-  playlist: "Playlist",
   news: "News",
   event: "Event",
 } as const;

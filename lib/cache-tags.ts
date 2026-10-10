@@ -8,6 +8,5 @@ export const CACHE_TAGS = {
   events: "events",
   programs: "programs",
   schedules: "schedules",
-  playlists: "playlists",
   siteSettings: "site-settings",
 } as const;

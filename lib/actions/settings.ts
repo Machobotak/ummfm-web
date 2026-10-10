@@ -5,15 +5,30 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth";
 import { CACHE_TAGS } from "@/lib/cache-tags";
+import { parseEmbedLink, splitEmbedLines } from "@/lib/embeds";
 import { getAdmin } from "@/lib/supabase/admin";
 import { fieldText, fieldTexts } from "./fields";
 import { httpUrlSchema, optionalHttpUrlSchema } from "./form-schema";
 import { databaseErrors, fieldErrors, type ActionResult } from "./result";
 
+/**
+ * Textarea CMS seksi "UMMFM on Music's": satu link embed per baris. Baris kosong
+ * dibuang, dan baris yang bukan link Spotify/Instagram ditolak dengan pesan
+ * field-nya sendiri.
+ */
+const embedTextSchema = z
+  .string()
+  .transform(splitEmbedLines)
+  .refine((links) => links.every((link) => parseEmbedLink(link) !== null), {
+    message: "Hanya link embed Spotify atau Instagram yang dikenali",
+  });
+
 const settingsSchema = z.object({
   tagline: z.string().trim().min(1, "Tagline wajib diisi"),
   heroBannerUrl: z.string().trim(),
   contactEmail: z.email("Email tidak valid"),
+  playlistEmbeds: embedTextSchema,
+  chartEmbeds: embedTextSchema,
   streamUrl: optionalHttpUrlSchema,
   seoTitle: z.string().trim().min(1, "Judul SEO wajib diisi"),
   seoDescription: z.string().trim().min(1, "Deskripsi SEO wajib diisi"),
@@ -51,6 +66,8 @@ export async function saveSettings(
     tagline: fieldText(formData, "tagline"),
     heroBannerUrl: fieldText(formData, "heroBannerUrl"),
     contactEmail: fieldText(formData, "contactEmail").trim(),
+    playlistEmbeds: fieldText(formData, "playlistEmbeds"),
+    chartEmbeds: fieldText(formData, "chartEmbeds"),
     streamUrl: fieldText(formData, "streamUrl"),
     seoTitle: fieldText(formData, "seoTitle"),
     seoDescription: fieldText(formData, "seoDescription"),
@@ -73,6 +90,8 @@ export async function saveSettings(
     { key: "tagline", value: parsed.data.tagline },
     { key: "hero_banner_url", value: parsed.data.heroBannerUrl },
     { key: "contact_email", value: parsed.data.contactEmail },
+    { key: "playlist_embeds", value: parsed.data.playlistEmbeds },
+    { key: "chart_embeds", value: parsed.data.chartEmbeds },
     { key: "social_links", value: parsed.data.socialLinks },
     { key: "about", value: parsed.data.about },
     { key: "stream_url", value: parsed.data.streamUrl },

@@ -32,6 +32,12 @@ export const socialLinksSchema = z.array(socialLinkSchema).min(1);
 export const textSchema = z.string().min(1);
 export const emailSchema = z.email();
 export const urlSchema = z.string().min(1);
+/**
+ * Daftar link embed seksi "UMMFM on Music's". Berbeda dari nilai teks lain,
+ * daftar kosong itu sah dan berarti tabnya belum diisi — jadi tidak jatuh ke
+ * default mock, melainkan ke array kosong.
+ */
+export const embedListSchema = z.array(z.string().min(1));
 
 /**
  * Susun `SiteSettings` dari baris tabel `site_settings`. Nilai hilang, kosong,
@@ -47,6 +53,8 @@ export function assembleSiteSettings(rows: SettingRow[]): SiteSettings {
   const about = aboutSchema.safeParse(value("about"));
   const seo = seoSchema.safeParse(value("seo"));
   const streamUrl = textSchema.safeParse(value("stream_url"));
+  const playlistEmbeds = embedListSchema.safeParse(value("playlist_embeds"));
+  const chartEmbeds = embedListSchema.safeParse(value("chart_embeds"));
 
   return {
     tagline: tagline.success ? tagline.data : mockSiteSettings.tagline,
@@ -56,5 +64,7 @@ export function assembleSiteSettings(rows: SettingRow[]): SiteSettings {
     about: about.success ? about.data : mockSiteSettings.about,
     streamUrl: streamUrl.success ? streamUrl.data : undefined,
     seo: seo.success ? seo.data : mockSiteSettings.seo,
+    playlistEmbeds: playlistEmbeds.success ? playlistEmbeds.data : [],
+    chartEmbeds: chartEmbeds.success ? chartEmbeds.data : [],
   };
 }

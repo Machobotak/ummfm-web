@@ -5,7 +5,6 @@ import {
   mapLiveMessage,
   mapMedia,
   mapNews,
-  mapPlaylist,
   mapProfile,
   mapProgram,
   mapSchedule,
@@ -15,7 +14,6 @@ import type {
   LiveMessageRow,
   MediaRow,
   NewsRow,
-  PlaylistRow,
   ProfileRow,
   ProgramRow,
   ScheduleRow,
@@ -26,7 +24,6 @@ import type {
   LiveMessage,
   MediaAsset,
   NewsArticle,
-  Playlist,
   Profile,
   Program,
   ProgramSchedule,
@@ -60,15 +57,6 @@ export async function listSchedules(): Promise<ProgramSchedule[]> {
     .order("start_time");
   if (error) throw error;
   return ((data ?? []) as ScheduleRow[]).map(mapSchedule);
-}
-
-export async function listPlaylists(): Promise<Playlist[]> {
-  const { data, error } = await getAdmin()
-    .from("playlists")
-    .select("*")
-    .order("sort_order", { ascending: true });
-  if (error) throw error;
-  return ((data ?? []) as PlaylistRow[]).map(mapPlaylist);
 }
 
 export async function listNews(): Promise<NewsArticle[]> {
@@ -122,7 +110,7 @@ export async function listProfiles(): Promise<Profile[]> {
 
 export interface RecentUpdate {
   id: string;
-  type: "program" | "playlist" | "news" | "event";
+  type: "program" | "news" | "event";
   title: string;
   updatedAt: string;
   href: string;
@@ -146,17 +134,16 @@ export async function dashboardStats(): Promise<DashboardStats> {
   const admin = getAdmin();
   const now = new Date().toISOString();
 
-  const [published, drafts, activePrograms, upcoming, news, playlists, events, programRows] = await Promise.all([
+  const [published, drafts, activePrograms, upcoming, news, events, programRows] = await Promise.all([
     admin.from("news").select("id", { count: "exact", head: true }).eq("status", "published"),
     admin.from("news").select("id", { count: "exact", head: true }).eq("status", "draft"),
     admin.from("programs").select("id", { count: "exact", head: true }).eq("is_active", true),
     admin.from("events").select("id", { count: "exact", head: true }).gt("starts_at", now),
     admin.from("news").select("id,title,updated_at").order("updated_at", { ascending: false }).limit(RECENT_LIMIT),
-    admin.from("playlists").select("id,title,updated_at").order("updated_at", { ascending: false }).limit(RECENT_LIMIT),
     admin.from("events").select("id,title,updated_at").order("updated_at", { ascending: false }).limit(RECENT_LIMIT),
     admin.from("programs").select("id,name,updated_at").order("updated_at", { ascending: false }).limit(RECENT_LIMIT),
   ]);
-  for (const result of [published, drafts, activePrograms, upcoming, news, playlists, events, programRows]) {
+  for (const result of [published, drafts, activePrograms, upcoming, news, events, programRows]) {
     if (result.error) throw result.error;
   }
 
@@ -174,13 +161,6 @@ export async function dashboardStats(): Promise<DashboardStats> {
       title: row.title as string,
       updatedAt: row.updated_at as string,
       href: `/admin/news/${row.id as string}`,
-    })),
-    ...(playlists.data ?? []).map((row) => ({
-      id: row.id as string,
-      type: "playlist" as const,
-      title: row.title as string,
-      updatedAt: row.updated_at as string,
-      href: `/admin/playlists/${row.id as string}`,
     })),
     ...(events.data ?? []).map((row) => ({
       id: row.id as string,
@@ -210,14 +190,13 @@ interface ImageReference {
 /** Semua gambar yang dipakai konten, lengkap dengan label untuk editor. */
 async function imageReferences(): Promise<ImageReference[]> {
   const admin = getAdmin();
-  const [programs, news, events, playlists, settings] = await Promise.all([
+  const [programs, news, events, settings] = await Promise.all([
     admin.from("programs").select("name,cover_image_url"),
     admin.from("news").select("title,thumbnail_url,cover_image_url"),
     admin.from("events").select("title,poster_url"),
-    admin.from("playlists").select("title,cover_image_url"),
     admin.from("site_settings").select("*"),
   ]);
-  for (const result of [programs, news, events, playlists, settings]) {
+  for (const result of [programs, news, events, settings]) {
     if (result.error) throw result.error;
   }
 
@@ -231,9 +210,6 @@ async function imageReferences(): Promise<ImageReference[]> {
   }
   for (const row of events.data ?? []) {
     references.push({ label: `Event "${row.title}"`, url: row.poster_url });
-  }
-  for (const row of playlists.data ?? []) {
-    references.push({ label: `Playlist "${row.title}"`, url: row.cover_image_url });
   }
 
   // Banner hero disimpan di `site_settings`, bukan di tabel konten.

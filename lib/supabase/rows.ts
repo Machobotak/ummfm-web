@@ -28,18 +28,6 @@ export interface ScheduleRow {
   is_active: boolean;
 }
 
-export interface PlaylistRow {
-  id: string;
-  title: string;
-  description: string;
-  cover_image_url: string;
-  external_url: string;
-  sort_order: number;
-  is_published: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface NewsRow {
   id: string;
   title: string;

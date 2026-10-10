@@ -16,7 +16,6 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/programs", label: "Program" },
   { href: "/admin/schedules", label: "Jadwal" },
-  { href: "/admin/playlists", label: "Playlist" },
   { href: "/admin/news", label: "News" },
   { href: "/admin/events", label: "Event" },
   { href: "/admin/media", label: "Media" },

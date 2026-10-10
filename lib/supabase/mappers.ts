@@ -3,7 +3,6 @@ import type {
   LiveMessage,
   MediaAsset,
   NewsArticle,
-  Playlist,
   Profile,
   Program,
   ProgramSchedule,
@@ -14,7 +13,6 @@ import type {
   EventRow,
   MediaRow,
   NewsRow,
-  PlaylistRow,
   ProfileRow,
   ProgramRow,
   ScheduleRow,
@@ -51,19 +49,6 @@ export function mapSchedule(row: ScheduleRow): ProgramSchedule {
     // kebutuhan lain di luar MVP.
     timezone: STATION_TZ,
     isActive: row.is_active,
-  };
-}
-
-export function mapPlaylist(row: PlaylistRow): Playlist {
-  return {
-    id: row.id,
-    title: row.title,
-    description: row.description,
-    coverImageUrl: row.cover_image_url,
-    externalUrl: row.external_url,
-    sortOrder: row.sort_order,
-    isPublished: row.is_published,
-    updatedAt: row.updated_at,
   };
 }
 
