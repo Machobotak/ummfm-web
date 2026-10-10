@@ -65,7 +65,9 @@ export function RadioPlayerProvider({
   }, []);
 
   const toggle = useCallback(() => {
-    if (status === "playing" || status === "connecting" || status === "paused") {
+    // "paused" harus memutar lagi, bukan menjeda ulang; kalau tidak, tombol
+    // "Putar" setelah jeda tidak melakukan apa-apa.
+    if (status === "playing" || status === "connecting") {
       pause();
     } else {
       play();
