@@ -1,5 +1,6 @@
 import { STATION_TZ } from "../format";
 import type {
+  LiveMessage,
   MediaAsset,
   NewsArticle,
   Playlist,
@@ -9,6 +10,7 @@ import type {
   RadioEvent,
 } from "../types";
 import type {
+  LiveMessageRow,
   EventRow,
   MediaRow,
   NewsRow,
@@ -119,6 +121,16 @@ export function mapProfile(row: ProfileRow): Profile {
     displayName: row.display_name,
     role: row.role,
     isActive: row.is_active,
+    createdAt: row.created_at,
+  };
+}
+
+export function mapLiveMessage(row: LiveMessageRow): LiveMessage {
+  return {
+    id: row.id,
+    name: row.name,
+    body: row.body,
+    isHidden: row.is_hidden,
     createdAt: row.created_at,
   };
 }

@@ -1,12 +1,14 @@
 import { Suspense } from "react";
 import { LiveRadioPlayer, type OnAirInfo } from "@/components/player/LiveRadioPlayer";
-import { CardImage } from "@/components/ui/CardImage";
 import { Container } from "@/components/ui/Container";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getLiveMessages } from "@/lib/content";
 import { formatDateWithWeekday, formatTimeRange } from "@/lib/format";
 import { getActiveProgram, getRequestNow, getUpcomingPrograms } from "@/lib/schedule";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { Program, ProgramSchedule } from "@/lib/types";
+import { LiveChat } from "./LiveChat";
 
 /**
  * Section live. Isi jadwal dibaca di server per request (`getRequestNow` +
@@ -44,6 +46,7 @@ async function OnAirContent({
   const now = await getRequestNow();
   const active = getActiveProgram(programs, schedules, now);
   const upcoming = getUpcomingPrograms(programs, schedules, now, 3);
+  const messages = await getLiveMessages();
 
   let onAir: OnAirInfo | undefined;
   if (active) {
@@ -51,6 +54,7 @@ async function OnAirContent({
       name: active.program.name,
       hostName: active.program.hostName,
       timeRange: formatTimeRange(active.schedule.startTime, active.schedule.endTime),
+      coverImageUrl: active.program.coverImageUrl,
     };
   }
 
@@ -59,32 +63,7 @@ async function OnAirContent({
       <LiveRadioPlayer variant="hero" activeProgram={onAir} />
 
       <div className="space-y-6">
-        {active ? (
-          <article className="overflow-hidden rounded-card border border-border bg-surface shadow-card">
-            <CardImage
-              src={active.program.coverImageUrl}
-              alt={`Cover program ${active.program.name}`}
-              ratio="4/5"
-              className="rounded-none"
-              sizes="(min-width: 1024px) 33vw, 100vw"
-            />
-            <div className="p-5">
-              <h3 className="text-xl font-semibold">{active.program.name}</h3>
-              <p className="mt-1 text-sm text-ink-500">{active.program.hostName}</p>
-              <p className="mt-2 font-semibold tabular-nums text-brand-700">
-                {formatTimeRange(active.schedule.startTime, active.schedule.endTime)}
-              </p>
-            </div>
-          </article>
-        ) : (
-          <div className="rounded-card border border-border bg-surface p-6">
-            <h3 className="text-xl font-semibold">Belum ada program aktif</h3>
-            <p className="mt-2 text-ink-700">
-              Saat ini tidak ada program terjadwal. Program berikutnya ada pada daftar di bawah —
-              semua waktu dalam WIB.
-            </p>
-          </div>
-        )}
+        <LiveChat initialMessages={messages} canPost={isSupabaseConfigured()} />
 
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wide text-ink-500">

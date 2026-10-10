@@ -120,3 +120,12 @@ export interface Profile {
   isActive: boolean;
   createdAt: string;
 }
+
+/** Pesan live chat pendengar (tabel `live_messages`). */
+export interface LiveMessage {
+  id: string;
+  name: string;
+  body: string;
+  isHidden: boolean;
+  createdAt: string;
+}

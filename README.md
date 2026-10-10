@@ -53,20 +53,25 @@ lib/data.ts             mock konten (semua gambar "" → MediaPlaceholder)
 lib/content.ts          seam baca publik (cache + fallback mock) untuk halaman/komponen
 lib/admin/data.ts       bacaan dashboard CMS (tanpa cache, di belakang auth)
 lib/actions/            server action tulis (programs, schedules, playlists, news, events,
-                        settings, media, users, auth) — semuanya `requireRole` + zod
+                        settings, media, users, auth, live-chat) — semua `requireRole` + zod,
+                        kecuali postLiveMessage (publik: honeypot, batas panjang, jeda per IP)
 lib/supabase/           klien Supabase (admin/server/browser), mapper baris, skema settings
 lib/schedule.ts         jadwal aktif/berikutnya menurut jam Asia/Jakarta
 lib/format.ts           format tanggal/jam id-ID + zona WIB
+lib/live-chat.ts        batas panjang, jeda kirim, dan interval polling live chat
 lib/stream.ts, lib/site.ts
 ```
 
 ## Backend Supabase (CMS)
 
 1. Buat project Supabase, lalu jalankan `supabase/migrations/0001_init.sql` di SQL Editor.
-2. (Opsional) jalankan `supabase/seed.sql` — berisi konten yang sama dengan mock `lib/data.ts`.
-3. Isi `.env.local` (lihat tabel di atas), lalu buat akun admin pertama lewat
+2. Jalankan `supabase/migrations/0002_live_messages.sql` — tabel live chat pendengar Home
+   (`live_messages` + `live_chat_limits`). Tanpa langkah ini Home tetap tampil, tetapi daftar
+   chat kosong dan pengiriman pesan ditolak.
+3. (Opsional) jalankan `supabase/seed.sql` — berisi konten yang sama dengan mock `lib/data.ts`.
+4. Isi `.env.local` (lihat tabel di atas), lalu buat akun admin pertama lewat
    Dashboard Supabase → Authentication → Users, dan set `profiles.role = 'admin'`.
-4. Buka `/admin/login`. Role `editor` boleh mengelola konten; role `admin` juga mengelola
+5. Buka `/admin/login`. Role `editor` boleh mengelola konten; role `admin` juga mengelola
    Pengguna. Akun dengan `profiles.is_active = false` tidak bisa masuk.
 
 `lib/content.ts` adalah satu-satunya seam baca untuk situs publik: tiap getter memakai
@@ -89,6 +94,11 @@ ditambahkan otomatis ke `images.remotePatterns` (`next.config.ts`) dari host
   terpisah dari status jadwal ("on air" per jadwal ≠ stream tersedia).
 - **Jadwal** mendukung slot lintas tengah malam (`endTime <= startTime`) dan dihitung
   memakai jam dinding `Asia/Jakarta`.
+- **Live chat** pendengar: daftar awal dirender server, lalu klien memanggil
+  `GET /api/live-chat` (`connection()` + `no-store`) tiap 10 detik selama tab terlihat. Kirim
+  pesan lewat server action publik dengan honeypot, batas 300 karakter, dan jeda 15 detik per
+  IP (hanya hash IP yang disimpan, di `live_chat_limits` yang tanpa policy). Moderasi di
+  `/admin/chat`: pesan yang disembunyikan langsung hilang dari Home, yang dihapus permanen.
 - **Dashboard** berada di route group `app/admin/(cms)/` dengan `app/admin/login` di luarnya:
   layout `(cms)` menjaga seluruh halaman CMS (`getCurrentUser()` → redirect `/admin/login`),
   dan halaman `/admin/login` tidak bisa ikut terjaga oleh layout yang sama tanpa loop.

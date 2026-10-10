@@ -1,7 +1,8 @@
 import type { ContentStatus, EventStatus, UserRole } from "../types";
 
 // Bentuk baris Postgres apa adanya (snake_case), persis kolom di
-// supabase/migrations/0001_init.sql. Mapper di ./mappers.ts yang mengubahnya.
+// supabase/migrations/0001_init.sql dan 0002_live_messages.sql. Mapper di
+// ./mappers.ts yang mengubahnya.
 // `time` dikirim supabase-js sebagai "HH:MM:SS"; timestamptz sebagai ISO string.
 
 export interface ProgramRow {
@@ -97,4 +98,12 @@ export interface SettingRow {
   value: unknown;
   updated_by: string | null;
   updated_at: string;
+}
+
+export interface LiveMessageRow {
+  id: string;
+  name: string;
+  body: string;
+  is_hidden: boolean;
+  created_at: string;
 }

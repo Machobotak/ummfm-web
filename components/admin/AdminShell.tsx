@@ -20,6 +20,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin/news", label: "News" },
   { href: "/admin/events", label: "Event" },
   { href: "/admin/media", label: "Media" },
+  { href: "/admin/chat", label: "Chat" },
   { href: "/admin/settings", label: "Pengaturan" },
   { href: "/admin/users", label: "Pengguna", adminOnly: true },
 ];

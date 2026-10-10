@@ -1,5 +1,6 @@
 "use client";
 
+import { CardImage } from "@/components/ui/CardImage";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { OnAirBadge } from "@/components/ui/OnAirBadge";
 import { STATION_NAME } from "@/lib/site";
@@ -10,6 +11,8 @@ export interface OnAirInfo {
   name: string;
   hostName: string;
   timeRange: string;
+  /** Cover program; dipakai varian `hero`, opsional supaya varian `bar` tetap ringkas. */
+  coverImageUrl?: string;
 }
 
 const STATUS_TEXT: Record<PlayerStatus, string> = {
@@ -92,7 +95,14 @@ export function LiveRadioPlayer({
 
   return (
     <div className="rounded-card border border-border bg-surface p-6 shadow-card sm:p-8">
-      <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,11rem)_1fr] sm:items-center">
+        <CardImage
+          src={activeProgram?.coverImageUrl ?? ""}
+          alt={activeProgram ? `Cover program ${activeProgram.name}` : "Cover program siaran"}
+          ratio="4/5"
+          sizes="176px"
+          className="w-full max-w-44"
+        />
         <div>
           {playing ? <OnAirBadge /> : null}
           <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-ink-500">
@@ -110,17 +120,19 @@ export function LiveRadioPlayer({
               Dengarkan siaran {STATION_NAME} — program berikutnya menyusul sesuai jadwal.
             </p>
           )}
-        </div>
-        <div className="flex flex-col items-start gap-3">
-          {playButton}
-          <p role="status" className="text-sm font-medium text-ink-700">
-            {STATUS_TEXT[status]}
-          </p>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            {playButton}
+            <p role="status" className="text-sm font-medium text-ink-700">
+              {STATUS_TEXT[status]}
+            </p>
+          </div>
           {status === "error" ? (
-            <ErrorState
-              message="Siaran belum dapat diakses. Sumber stream mungkin sedang off-air."
-              onRetry={play}
-            />
+            <div className="mt-3">
+              <ErrorState
+                message="Siaran belum dapat diakses. Sumber stream mungkin sedang off-air."
+                onRetry={play}
+              />
+            </div>
           ) : null}
         </div>
       </div>

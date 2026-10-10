@@ -8,11 +8,13 @@ import {
   mockSchedules,
   mockSiteSettings,
 } from "./data";
+import { LIVE_CHAT_PUBLIC_LIMIT } from "./live-chat";
 import { getAdmin } from "./supabase/admin";
 import { isSupabaseConfigured } from "./supabase/config";
-import { mapEvent, mapNews, mapPlaylist, mapProgram, mapSchedule } from "./supabase/mappers";
+import { mapEvent, mapLiveMessage, mapNews, mapPlaylist, mapProgram, mapSchedule } from "./supabase/mappers";
 import type {
   EventRow,
+  LiveMessageRow,
   NewsRow,
   PlaylistRow,
   ProgramRow,
@@ -21,6 +23,7 @@ import type {
 } from "./supabase/rows";
 import { assembleSiteSettings } from "./supabase/settings-schema";
 import type {
+  LiveMessage,
   NewsArticle,
   Playlist,
   Program,
@@ -181,4 +184,28 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   if (error) throw error;
 
   return assembleSiteSettings((data ?? []) as SettingRow[]);
+}
+
+/**
+ * Pesan live chat untuk Home. Tanpa `"use cache"` — chat harus segar tiap
+ * request karena dibaca ulang oleh polling — dan sengaja tidak melempar: tabel
+ * baru ada setelah `0002_live_messages.sql` dijalankan, dan situs publik tidak
+ * boleh mati hanya karena chat belum siap (kegagalan terbaca di log server).
+ */
+export async function getLiveMessages(): Promise<LiveMessage[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  const { data, error } = await getAdmin()
+    .from("live_messages")
+    .select("*")
+    .eq("is_hidden", false)
+    .order("created_at", { ascending: false })
+    .limit(LIVE_CHAT_PUBLIC_LIMIT);
+  if (error) {
+    console.warn(`Live chat: pesan gagal dibaca (${error.message}).`);
+    return [];
+  }
+
+  // Urutan tampil chat: terlama di atas, terbaru di bawah.
+  return ((data ?? []) as LiveMessageRow[]).map(mapLiveMessage).reverse();
 }

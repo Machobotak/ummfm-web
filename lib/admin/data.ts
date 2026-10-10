@@ -1,6 +1,8 @@
+import { LIVE_CHAT_ADMIN_LIMIT } from "../live-chat";
 import { getAdmin } from "../supabase/admin";
 import {
   mapEvent,
+  mapLiveMessage,
   mapMedia,
   mapNews,
   mapPlaylist,
@@ -10,6 +12,7 @@ import {
 } from "../supabase/mappers";
 import type {
   EventRow,
+  LiveMessageRow,
   MediaRow,
   NewsRow,
   PlaylistRow,
@@ -20,6 +23,7 @@ import type {
 } from "../supabase/rows";
 import { assembleSiteSettings } from "../supabase/settings-schema";
 import type {
+  LiveMessage,
   MediaAsset,
   NewsArticle,
   Playlist,
@@ -257,4 +261,15 @@ export async function getSettingsForEdit(): Promise<SiteSettings> {
   const { data, error } = await getAdmin().from("site_settings").select("*");
   if (error) throw error;
   return assembleSiteSettings((data ?? []) as SettingRow[]);
+}
+
+/** Semua pesan live chat, termasuk yang disembunyikan, untuk moderasi CMS. */
+export async function listLiveMessages(): Promise<LiveMessage[]> {
+  const { data, error } = await getAdmin()
+    .from("live_messages")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(LIVE_CHAT_ADMIN_LIMIT);
+  if (error) throw error;
+  return ((data ?? []) as LiveMessageRow[]).map(mapLiveMessage);
 }

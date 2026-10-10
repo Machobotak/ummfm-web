@@ -239,12 +239,16 @@ Status yang harus didesain:
 
 Jangan mengklaim radio sedang live hanya karena ada jadwal aktif; status jadwal dan status koneksi stream adalah dua informasi berbeda.
 
-### 6.3 Program On Air dan Program Berikutnya
+### 6.3 Program On Air, Live Chat, dan Program Berikutnya
 
-- Tampilkan satu kartu utama untuk program aktif.
-- Gunakan cover dengan rasio 4:5 atau 3:4 jika artwork program berbentuk poster.
-- Di bawah gambar: nama program, penyiar, dan jam tayang.
+- Cover program aktif tampil di dalam kartu player dengan rasio 4:5 bila artwork berbentuk
+  poster; nama program, penyiar, dan jam tayang berada di sisi cover.
 - Program berikutnya tampil sebagai daftar atau kartu yang lebih kecil.
+- Live chat pendengar menempati kolom kanan, di atas daftar program berikutnya:
+  - Nama pengirim maksimal 40 karakter, pesan maksimal 300 karakter.
+  - Jeda kirim 15 detik per IP dan honeypot untuk menahan bot; pengunjung tanpa akun.
+  - Pesan baru muncul tanpa reload (polling 10 detik) dan jam kirim memakai `Asia/Jakarta`.
+  - Daftar kosong, pesan gagal terkirim, dan pesan tersembunyi punya tampilan masing-masing.
 - Data dan gambar berasal dari CMS, bukan hard-coded.
 - Ketika jadwal berganti, konten yang relevan berubah berdasarkan waktu `Asia/Jakarta`.
 
