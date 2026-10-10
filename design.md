@@ -200,10 +200,14 @@ Layout:
 - Subheadline singkat tentang radio kampus UMMFM.
 - CTA utama: “Dengarkan Live”.
 - CTA sekunder: “Lihat Program”.
-- Gunakan satu aset visual utama: banner dari CMS (Pengaturan → banner hero, rasio 16:9). Bisa
-  berupa logo, foto studio, atau artwork brand.
-- Desktop: teks hero dan banner berdampingan dua kolom. Tanpa banner, hero tetap satu kolom.
-- Background putih atau `brand-50`, dengan aksen biru sederhana.
+- Gunakan satu aset visual utama: banner dari CMS (Pengaturan → banner hero, lanskap 16:9 atau
+  lebih lebar). Pilih foto atau artwork dengan area tenang; hindari teks atau logo besar di dalam
+  banner karena teks hero ditumpuk di atasnya.
+- Banner tampil sebagai latar penuh hero (full-bleed, tepi ke tepi) dengan teks hero di atasnya,
+  bukan sebagai kartu terpisah.
+- Lapisan gelap `ink-950` minimal 70% menutup banner supaya teks putih tetap kontras untuk banner
+  apa pun; banner tetap terlihat sebagai tekstur di belakangnya.
+- Tanpa banner, hero satu kolom dengan latar `brand-50` dan teks `ink-950`.
 
 Hindari:
 - Headline yang terlalu besar hingga mengambil seluruh viewport.
@@ -538,7 +542,7 @@ Gunakan motion seperlunya:
 
 ### Desktop
 - Maksimal tiga kolom untuk kartu konten.
-- Player dan hero dapat menggunakan dua kolom.
+- Player dapat menggunakan dua kolom; hero memakai latar banner penuh dengan teks di atasnya.
 - Dashboard menggunakan sidebar tetap.
 - Hindari konten yang melebar tanpa batas pada monitor besar.
 
