@@ -61,11 +61,22 @@ export function Hero({ bannerUrl }: { bannerUrl: string }) {
   }
 
   return (
-    <section className="relative isolate flex min-h-[360px] items-center overflow-hidden border-b border-border bg-ink-950 lg:aspect-[12/5] lg:max-h-[86vh] lg:min-h-[520px]">
-      <Image src={bannerUrl} alt="" fill priority sizes="100vw" className="-z-10 object-cover" />
-      {/* Lapisan gelap minimal 70% supaya teks putih tetap kontras di atas banner apa pun. */}
-      <div className="absolute inset-0 -z-10 bg-ink-950/70" aria-hidden />
-      <Container className="relative py-14 sm:py-16 lg:py-20">{copy}</Container>
+    <section className="relative isolate overflow-hidden border-b border-border bg-ink-950 lg:flex lg:aspect-[12/5] lg:max-h-[86vh] lg:min-h-[520px] lg:items-center">
+      {/* Di layar kecil banner tampil utuh pada rasio 12:5 dengan teks di bawahnya; mulai 1024 px
+          banner jadi latar penuh dengan teks di atasnya. */}
+      <div className="relative aspect-[12/5] w-full lg:absolute lg:inset-0 lg:aspect-auto">
+        <Image
+          src={bannerUrl}
+          alt=""
+          fill
+          preload
+          sizes="100vw"
+          className="object-contain lg:object-cover"
+        />
+        {/* Lapisan gelap minimal 70% supaya teks putih tetap kontras di atas banner apa pun. */}
+        <div className="absolute inset-0 hidden bg-ink-950/70 lg:block" aria-hidden />
+      </div>
+      <Container className="relative py-10 sm:py-12 lg:py-20">{copy}</Container>
     </section>
   );
 }

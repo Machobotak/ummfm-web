@@ -203,13 +203,14 @@ Layout:
 - Gunakan satu aset visual utama: banner dari CMS (Pengaturan → banner hero) dengan rasio lanskap
   sekitar 12:5, misalnya 2048×853. Pilih foto atau artwork dengan area tenang; hindari teks atau
   logo besar di dalam banner karena teks hero ditumpuk di atasnya.
-- Banner tampil sebagai latar penuh hero (full-bleed, tepi ke tepi) dengan teks hero di atasnya,
-  bukan sebagai kartu terpisah.
+- Mulai 1024 px banner tampil sebagai latar penuh hero (full-bleed, tepi ke tepi) dengan teks hero di
+  atasnya, bukan sebagai kartu terpisah. Tinggi hero mengikuti lebar dengan rasio 12:5 dan dibatasi
+  `max-h-[86vh]`, jadi banner lanskap tampil utuh; di bawah 1248 px `min-h-[520px]` menjaga hero
+  tetap tinggi.
 - Lapisan gelap `ink-950` minimal 70% menutup banner supaya teks putih tetap kontras untuk banner
   apa pun; banner tetap terlihat sebagai tekstur di belakangnya.
-- Di desktop (≥1024 px) tinggi hero mengikuti lebar dengan rasio 12:5 dan dibatasi `max-h-[86vh]`,
-  sehingga banner lanskap tampil utuh, bukan terpotong jadi strip; di bawah itu hero memakai
-  `min-h-[360px]`.
+- Di bawah 1024 px banner tampil utuh pada kotak rasio 12:5 (`object-contain`) selebar layar, dan
+  teks hero berada di bawah banner, bukan menumpuk di atasnya.
 - Tanpa banner, hero satu kolom dengan latar `brand-50` dan teks `ink-950`.
 
 Hindari:
@@ -533,6 +534,7 @@ Gunakan motion seperlunya:
 ### Mobile
 - Satu kolom untuk berita dan event.
 - Hero lebih ringkas; CTA tidak memenuhi seluruh layar.
+- Hero menampilkan banner utuh (kotak rasio 12:5) dengan teks di bawahnya, tanpa bagian terpotong.
 - Player tetap mudah diakses dan tidak menutupi konten.
 - Playlist dapat ditampilkan sebagai daftar atau carousel yang dapat di-scroll.
 - Menu navigasi memakai drawer/dropdown.
