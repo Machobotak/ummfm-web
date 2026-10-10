@@ -1,31 +1,31 @@
 -- Seed idempotent. Nilai persis lib/data.ts (sumber kebenaran nilai).
--- Jalankan setelah 0001_init.sql. Lewati file ini bila ingin mulai kosong.
+-- Jalankan setelah semua file di supabase/migrations/. Lewati file ini bila ingin mulai kosong.
 
 insert into public.programs
-  (name, slug, description, cover_image_url, host_name, is_active, is_published, created_at, updated_at)
+  (name, slug, description, cover_image_url, is_active, is_published, created_at, updated_at)
 values
-  ('Semesta Pagi',    'semesta-pagi',    'Program pagi penyemangat hari.',      '', 'Host A', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
-  ('Kapsul Musik',    'kapsul-musik',    'Kurasi lagu pilihan.',                '', 'Host B', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
-  ('Update Kampus',   'update-kampus',   'Info dan kabar kampus UMM.',          '', 'Host C', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
-  ('Ngobrol Sore',    'ngobrol-sore',    'Bincang santai sore hari.',           '', 'Host D', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
-  ('Kolase Indie',    'kolase-indie',    'Musik indie lokal dan nasional.',     '', 'Host E', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
-  ('Gelombang Malam', 'gelombang-malam', 'Teman begadang lintas tengah malam.', '', 'Host F', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00')
+  ('Semesta Pagi',    'semesta-pagi',    'Program pagi penyemangat hari.',      '', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
+  ('Kapsul Musik',    'kapsul-musik',    'Kurasi lagu pilihan.',                '', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
+  ('Update Kampus',   'update-kampus',   'Info dan kabar kampus UMM.',          '', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
+  ('Ngobrol Sore',    'ngobrol-sore',    'Bincang santai sore hari.',           '', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
+  ('Kolase Indie',    'kolase-indie',    'Musik indie lokal dan nasional.',     '', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00'),
+  ('Gelombang Malam', 'gelombang-malam', 'Teman begadang lintas tengah malam.', '', true, true, '2026-08-01T08:00:00+07:00', '2026-10-01T08:00:00+07:00')
 on conflict (slug) do nothing;
 
 -- 23 slot: 4 program Senin–Jumat, Kolase Indie Sabtu, Gelombang Malam Jumat+Sabtu
 -- (22:00–01:00 → lintas tengah malam).
-with slots(slug, start_time, end_time, days) as (
+with slots(slug, start_time, end_time, days, host) as (
   values
-    ('semesta-pagi',    time '06:00', time '09:00', array[1,2,3,4,5]),
-    ('kapsul-musik',    time '09:00', time '12:00', array[1,2,3,4,5]),
-    ('update-kampus',   time '12:00', time '15:00', array[1,2,3,4,5]),
-    ('ngobrol-sore',    time '15:00', time '18:00', array[1,2,3,4,5]),
-    ('kolase-indie',    time '18:00', time '21:00', array[6]),
-    ('gelombang-malam', time '22:00', time '01:00', array[5,6])
+    ('semesta-pagi',    time '06:00', time '09:00', array[1,2,3,4,5], 'Host A'),
+    ('kapsul-musik',    time '09:00', time '12:00', array[1,2,3,4,5], 'Host B'),
+    ('update-kampus',   time '12:00', time '15:00', array[1,2,3,4,5], 'Host C'),
+    ('ngobrol-sore',    time '15:00', time '18:00', array[1,2,3,4,5], 'Host D'),
+    ('kolase-indie',    time '18:00', time '21:00', array[6],          'Host E'),
+    ('gelombang-malam', time '22:00', time '01:00', array[5,6],        'Host F')
 )
 insert into public.program_schedules
-  (program_id, day_of_week, start_time, end_time, timezone, is_active)
-select p.id, day, slots.start_time, slots.end_time, 'Asia/Jakarta', true
+  (program_id, day_of_week, start_time, end_time, host_name, timezone, is_active)
+select p.id, day, slots.start_time, slots.end_time, slots.host, 'Asia/Jakarta', true
 from slots
 join public.programs p on p.slug = slots.slug
 cross join lateral unnest(slots.days) as day
@@ -101,5 +101,6 @@ insert into public.site_settings (key, value) values
       "Mendukung kreativitas dan karya mahasiswa melalui kanal siaran dan konten digital."
     ]
   }'::jsonb),
-  ('stream_url', '""'::jsonb)
+  ('stream_url', '""'::jsonb),
+  ('hero_banner_url', '""'::jsonb)
 on conflict (key) do nothing;
