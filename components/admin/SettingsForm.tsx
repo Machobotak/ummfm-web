@@ -32,7 +32,7 @@ function SaveNotice({ visible }: { visible: boolean }) {
 function SectionSave({ visible, onSave }: { visible: boolean; onSave: () => void }) {
   return (
     <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
-      <SubmitButton label="Simpan" variant="secondary" onClick={onSave} />
+      <SubmitButton label="Simpan" onClick={onSave} />
       <SaveNotice visible={visible} />
     </div>
   );
