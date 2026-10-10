@@ -41,6 +41,7 @@ export function assembleSiteSettings(rows: SettingRow[]): SiteSettings {
   const value = (key: string) => rows.find((row) => row.key === key)?.value;
 
   const tagline = textSchema.safeParse(value("tagline"));
+  const heroBannerUrl = textSchema.safeParse(value("hero_banner_url"));
   const contactEmail = emailSchema.safeParse(value("contact_email"));
   const socialLinks = socialLinksSchema.safeParse(value("social_links"));
   const about = aboutSchema.safeParse(value("about"));
@@ -49,6 +50,7 @@ export function assembleSiteSettings(rows: SettingRow[]): SiteSettings {
 
   return {
     tagline: tagline.success ? tagline.data : mockSiteSettings.tagline,
+    heroBannerUrl: heroBannerUrl.success ? heroBannerUrl.data : mockSiteSettings.heroBannerUrl,
     contactEmail: contactEmail.success ? contactEmail.data : mockSiteSettings.contactEmail,
     socialLinks: socialLinks.success ? socialLinks.data : mockSiteSettings.socialLinks,
     about: about.success ? about.data : mockSiteSettings.about,

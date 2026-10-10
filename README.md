@@ -68,10 +68,14 @@ lib/stream.ts, lib/site.ts
 2. Jalankan `supabase/migrations/0002_live_messages.sql` — tabel live chat pendengar Home
    (`live_messages` + `live_chat_limits`). Tanpa langkah ini Home tetap tampil, tetapi daftar
    chat kosong dan pengiriman pesan ditolak.
-3. (Opsional) jalankan `supabase/seed.sql` — berisi konten yang sama dengan mock `lib/data.ts`.
-4. Isi `.env.local` (lihat tabel di atas), lalu buat akun admin pertama lewat
+3. Jalankan `supabase/migrations/0003_schedule_host.sql` — penyiar pindah dari program ke slot
+   jadwal (`program_schedules.host_name`). Migrasi menyalin penyiar tiap program ke semua
+   slotnya lalu menghapus kolom `programs.host_name`. Selama belum dijalankan, nama penyiar
+   tampil kosong dan penyimpanan slot jadwal dari CMS gagal.
+4. (Opsional) jalankan `supabase/seed.sql` — berisi konten yang sama dengan mock `lib/data.ts`.
+5. Isi `.env.local` (lihat tabel di atas), lalu buat akun admin pertama lewat
    Dashboard Supabase → Authentication → Users, dan set `profiles.role = 'admin'`.
-5. Buka `/admin/login`. Role `editor` boleh mengelola konten; role `admin` juga mengelola
+6. Buka `/admin/login`. Role `editor` boleh mengelola konten; role `admin` juga mengelola
    Pengguna. Akun dengan `profiles.is_active = false` tidak bisa masuk.
 
 `lib/content.ts` adalah satu-satunya seam baca untuk situs publik: tiap getter memakai

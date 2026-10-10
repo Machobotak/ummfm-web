@@ -13,7 +13,6 @@ export interface Program {
   slug: string;
   description: string;
   coverImageUrl: string; // "" → MediaPlaceholder
-  hostName: string;
   isActive: boolean;
   isPublished: boolean;
   createdAt: string;
@@ -26,6 +25,7 @@ export interface ProgramSchedule {
   dayOfWeek: number; // 0=Minggu … 6=Sabtu
   startTime: string; // "HH:MM" Asia/Jakarta
   endTime: string; // "HH:MM"; endTime <= startTime → lintas tengah malam
+  hostName: string; // penyiar slot ini; "" berarti belum diisi
   timezone: "Asia/Jakarta";
   isActive: boolean;
 }
@@ -93,6 +93,8 @@ export interface SeoSettings {
 
 export interface SiteSettings {
   tagline: string;
+  /** Banner hero di Home; "" berarti hero tampil tanpa gambar. */
+  heroBannerUrl: string;
   contactEmail: string;
   socialLinks: SocialLink[];
   about: AboutContent;

@@ -200,7 +200,9 @@ Layout:
 - Subheadline singkat tentang radio kampus UMMFM.
 - CTA utama: “Dengarkan Live”.
 - CTA sekunder: “Lihat Program”.
-- Gunakan satu aset visual utama: logo, foto studio, atau artwork brand.
+- Gunakan satu aset visual utama: banner dari CMS (Pengaturan → banner hero, rasio 16:9). Bisa
+  berupa logo, foto studio, atau artwork brand.
+- Desktop: teks hero dan banner berdampingan dua kolom. Tanpa banner, hero tetap satu kolom.
 - Background putih atau `brand-50`, dengan aksen biru sederhana.
 
 Hindari:
@@ -214,7 +216,7 @@ Gunakan satu komponen player yang kuat secara visual.
 
 **Desktop:**
 - Layout horizontal dua kolom.
-- Area informasi berisi badge LIVE, nama program, nama penyiar, dan jam siaran.
+- Area informasi berisi badge LIVE, nama program, nama penyiar (dari slot jadwal), dan jam siaran.
 - Area kontrol berisi tombol Play/Pause yang jelas, indikator loading/error, dan volume jika didukung.
 
 **Mobile:**
@@ -238,6 +240,9 @@ Status yang harus didesain:
 - Off-air: “Di luar jadwal siaran” jika tidak ada program aktif.
 
 Jangan mengklaim radio sedang live hanya karena ada jadwal aktif; status jadwal dan status koneksi stream adalah dua informasi berbeda.
+
+- Nama penyiar mengikuti slot jadwal yang sedang tayang: satu program bisa punya penyiar berbeda
+  per slot, dan penyiar boleh kosong bila belum diisi.
 
 ### 6.3 Program On Air, Live Chat, dan Program Berikutnya
 
@@ -410,6 +415,8 @@ Panduan:
 - Gunakan tabel atau daftar per hari.
 - Tampilkan jam mulai dan selesai dalam format yang konsisten.
 - Tampilkan zona waktu WIB.
+- Penyiar diatur per slot jadwal (boleh beberapa nama, boleh kosong); data program tidak lagi
+  menyimpan penyiar.
 - Beri peringatan visual dan teks jika ada jadwal yang bertabrakan.
 - Sediakan preview program yang aktif pada hari/jam tertentu.
 - Jangan menganggap status stream otomatis sama dengan status jadwal.

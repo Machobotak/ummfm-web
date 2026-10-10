@@ -12,6 +12,7 @@ import { databaseErrors, fieldErrors, type ActionResult } from "./result";
 
 const settingsSchema = z.object({
   tagline: z.string().trim().min(1, "Tagline wajib diisi"),
+  heroBannerUrl: z.string().trim(),
   contactEmail: z.email("Email tidak valid"),
   streamUrl: optionalHttpUrlSchema,
   seoTitle: z.string().trim().min(1, "Judul SEO wajib diisi"),
@@ -48,6 +49,7 @@ export async function saveSettings(
 
   const parsed = settingsSchema.safeParse({
     tagline: fieldText(formData, "tagline"),
+    heroBannerUrl: fieldText(formData, "heroBannerUrl"),
     contactEmail: fieldText(formData, "contactEmail").trim(),
     streamUrl: fieldText(formData, "streamUrl"),
     seoTitle: fieldText(formData, "seoTitle"),
@@ -69,6 +71,7 @@ export async function saveSettings(
   const updatedAt = new Date().toISOString();
   const rows = [
     { key: "tagline", value: parsed.data.tagline },
+    { key: "hero_banner_url", value: parsed.data.heroBannerUrl },
     { key: "contact_email", value: parsed.data.contactEmail },
     { key: "social_links", value: parsed.data.socialLinks },
     { key: "about", value: parsed.data.about },

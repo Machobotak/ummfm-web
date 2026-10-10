@@ -18,7 +18,6 @@ export interface ProgramFormValues {
   slug: string;
   description: string;
   coverImageUrl: string;
-  hostName: string;
   isActive: boolean;
   isPublished: boolean;
 }
@@ -29,7 +28,6 @@ const EMPTY_VALUES: ProgramFormValues = {
   slug: "",
   description: "",
   coverImageUrl: "",
-  hostName: "",
   isActive: true,
   isPublished: false,
 };
@@ -87,20 +85,6 @@ export function ProgramForm({
             }}
             aria-invalid={Boolean(errors.slug)}
             className={inputClass(errors.slug)}
-          />
-        </FormField>
-
-        <FormField
-          label="Host / penyiar"
-          htmlFor="program-host"
-          error={errors.hostName}
-          hint="Nama penyiar yang tampil bersama program."
-        >
-          <input
-            id="program-host"
-            name="hostName"
-            defaultValue={initial.hostName}
-            className={inputClass(errors.hostName)}
           />
         </FormField>
 

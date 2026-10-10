@@ -52,7 +52,7 @@ async function OnAirContent({
   if (active) {
     onAir = {
       name: active.program.name,
-      hostName: active.program.hostName,
+      hostName: active.schedule.hostName,
       timeRange: formatTimeRange(active.schedule.startTime, active.schedule.endTime),
       coverImageUrl: active.program.coverImageUrl,
     };
@@ -77,6 +77,7 @@ async function OnAirContent({
               >
                 <p className="font-semibold">{program.name}</p>
                 <p className="text-sm text-ink-500">
+                  {schedule.hostName ? `${schedule.hostName} · ` : ""}
                   {formatDateWithWeekday(startsAt.toISOString())} ·{" "}
                   {formatTimeRange(schedule.startTime, schedule.endTime)}
                 </p>

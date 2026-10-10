@@ -16,7 +16,6 @@ const programSchema = z.object({
   slug: slugSchema,
   description: z.string().trim(),
   coverImageUrl: z.string().trim(),
-  hostName: z.string().trim(),
   isActive: z.boolean(),
   isPublished: z.boolean(),
 });
@@ -33,7 +32,6 @@ export async function saveProgram(
     slug: fieldText(formData, "slug"),
     description: fieldText(formData, "description"),
     coverImageUrl: fieldText(formData, "coverImageUrl"),
-    hostName: fieldText(formData, "hostName"),
     isActive: fieldChecked(formData, "isActive"),
     isPublished: fieldChecked(formData, "isPublished"),
   });
@@ -45,7 +43,6 @@ export async function saveProgram(
     slug: values.slug,
     description: values.description,
     cover_image_url: values.coverImageUrl,
-    host_name: values.hostName,
     is_active: values.isActive,
     is_published: values.isPublished,
   };

@@ -5,9 +5,10 @@ import { useActionState, useState } from "react";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import { saveSettings } from "@/lib/actions/settings";
-import type { SiteSettings } from "@/lib/types";
+import type { MediaAsset, SiteSettings } from "@/lib/types";
 import { buttonClass } from "./buttonClass";
 import { FormField, inputClass } from "./FormField";
+import { ImagePicker } from "./ImagePicker";
 import { SubmitButton } from "./SubmitButton";
 
 interface SocialLinkRow {
@@ -30,9 +31,11 @@ const EMPTY_SOCIAL_LINK: SocialLinkRow = { platform: "", label: "", url: "" };
 export function SettingsForm({
   initial,
   fallbackStreamUrl,
+  media,
 }: {
   initial: SiteSettings;
   fallbackStreamUrl: string;
+  media: MediaAsset[];
 }) {
   const [state, formAction] = useActionState(saveSettings, EMPTY_ACTION_RESULT);
   const errors = state.ok ? {} : state.errors;
@@ -81,6 +84,15 @@ export function SettingsForm({
             className={inputClass(errors.tagline)}
           />
         </FormField>
+
+        <ImagePicker
+          name="heroBannerUrl"
+          label="Banner hero (16:9)"
+          initialUrl={initial.heroBannerUrl}
+          media={media}
+          error={errors.heroBannerUrl}
+          hint="Tampil di samping teks hero pada Home. Kosongkan untuk hero tanpa gambar."
+        />
 
         <FormField
           label="Email kontak"

@@ -20,6 +20,7 @@ const scheduleSchema = z.object({
     .transform(Number),
   startTime: timeSchema,
   endTime: timeSchema,
+  hostName: z.string().trim(),
   isActive: z.boolean(),
 });
 
@@ -41,6 +42,7 @@ export async function saveSchedule(
     dayOfWeek: fieldText(formData, "dayOfWeek"),
     startTime: fieldText(formData, "startTime"),
     endTime: fieldText(formData, "endTime"),
+    hostName: fieldText(formData, "hostName"),
     isActive: fieldChecked(formData, "isActive"),
   });
   if (!parsed.success) return { ok: false, errors: fieldErrors(parsed.error) };
@@ -51,6 +53,7 @@ export async function saveSchedule(
     day_of_week: values.dayOfWeek,
     start_time: values.startTime,
     end_time: values.endTime,
+    host_name: values.hostName,
     is_active: values.isActive,
   };
 

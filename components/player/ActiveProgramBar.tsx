@@ -20,7 +20,7 @@ export async function ActiveProgramBar() {
   if (active) {
     onAir = {
       name: active.program.name,
-      hostName: active.program.hostName,
+      hostName: active.schedule.hostName,
       timeRange: formatTimeRange(active.schedule.startTime, active.schedule.endTime),
     };
   }

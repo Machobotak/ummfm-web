@@ -37,7 +37,7 @@ export default async function ProgramPage() {
         description="Program harian UMMFM, dari siaran pagi sampai acara malam."
       />
       <p className="mb-8 max-w-[720px] text-ink-700">
-        Kenali penyiar dan karakter setiap program, lalu simak jam tayangnya di jadwal mingguan.
+        Kenali karakter setiap program, lalu lihat penyiar dan jam tayangnya di jadwal mingguan.
       </p>
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

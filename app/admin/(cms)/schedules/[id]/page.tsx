@@ -25,6 +25,7 @@ export default async function EditSchedulePage({ params }: { params: Promise<{ i
           dayOfWeek: schedule.dayOfWeek,
           startTime: schedule.startTime,
           endTime: schedule.endTime,
+          hostName: schedule.hostName,
           isActive: schedule.isActive,
         }}
         redirectTo="/admin/schedules"

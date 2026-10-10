@@ -26,7 +26,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      <Hero bannerUrl={settings.heroBannerUrl} />
       <OnAirSection programs={programs} schedules={schedules} />
       <ProgramsSection programs={programs} schedules={schedules} />
       <PlaylistsSection playlists={playlists} />

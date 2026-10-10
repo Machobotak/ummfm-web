@@ -75,6 +75,9 @@ export function ScheduleBoard({
                   <span className="flex-1 font-semibold">
                     {nameById.get(schedule.programId) ?? "Program terhapus"}
                   </span>
+                  {schedule.hostName ? (
+                    <span className="text-sm text-ink-500">{schedule.hostName}</span>
+                  ) : null}
                   <span className="text-xs font-semibold text-ink-500">
                     {schedule.isActive ? "Aktif" : "Nonaktif"}
                   </span>

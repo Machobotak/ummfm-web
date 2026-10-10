@@ -210,13 +210,14 @@ interface ImageReference {
 /** Semua gambar yang dipakai konten, lengkap dengan label untuk editor. */
 async function imageReferences(): Promise<ImageReference[]> {
   const admin = getAdmin();
-  const [programs, news, events, playlists] = await Promise.all([
+  const [programs, news, events, playlists, settings] = await Promise.all([
     admin.from("programs").select("name,cover_image_url"),
     admin.from("news").select("title,thumbnail_url,cover_image_url"),
     admin.from("events").select("title,poster_url"),
     admin.from("playlists").select("title,cover_image_url"),
+    admin.from("site_settings").select("*"),
   ]);
-  for (const result of [programs, news, events, playlists]) {
+  for (const result of [programs, news, events, playlists, settings]) {
     if (result.error) throw result.error;
   }
 
@@ -234,6 +235,10 @@ async function imageReferences(): Promise<ImageReference[]> {
   for (const row of playlists.data ?? []) {
     references.push({ label: `Playlist "${row.title}"`, url: row.cover_image_url });
   }
+
+  // Banner hero disimpan di `site_settings`, bukan di tabel konten.
+  const { heroBannerUrl } = assembleSiteSettings((settings.data ?? []) as SettingRow[]);
+  references.push({ label: "Banner hero (Pengaturan)", url: heroBannerUrl });
 
   return references.filter((reference) => reference.url !== "");
 }

@@ -17,6 +17,7 @@ export interface ScheduleFormValues {
   dayOfWeek: number;
   startTime: string;
   endTime: string;
+  hostName: string;
   isActive: boolean;
 }
 
@@ -94,6 +95,20 @@ export function ScheduleForm({
           />
         </FormField>
       </div>
+
+      <FormField
+        label="Host / penyiar"
+        htmlFor="schedule-host"
+        error={errors.hostName}
+        hint="Nama penyiar untuk slot ini. Satu program bisa punya penyiar berbeda per slot, dan satu slot boleh menyebut beberapa nama."
+      >
+        <input
+          id="schedule-host"
+          name="hostName"
+          defaultValue={initial?.hostName ?? ""}
+          className={inputClass(errors.hostName)}
+        />
+      </FormField>
 
       <FormCheckbox label="Slot aktif" name="isActive" defaultChecked={initial?.isActive ?? true} />
 

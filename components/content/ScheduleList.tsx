@@ -20,7 +20,9 @@ export function ScheduleList({ entries }: { entries: ScheduleEntry[] }) {
           </span>
           <span className="text-ink-700">
             {program.name}
-            <span className="text-ink-500"> · {program.hostName}</span>
+            {schedule.hostName ? (
+              <span className="text-ink-500"> · {schedule.hostName}</span>
+            ) : null}
           </span>
         </li>
       ))}

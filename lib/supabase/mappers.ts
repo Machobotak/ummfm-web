@@ -32,7 +32,6 @@ export function mapProgram(row: ProgramRow): Program {
     slug: row.slug,
     description: row.description,
     coverImageUrl: row.cover_image_url,
-    hostName: row.host_name,
     isActive: row.is_active,
     isPublished: row.is_published,
     createdAt: row.created_at,
@@ -47,6 +46,7 @@ export function mapSchedule(row: ScheduleRow): ProgramSchedule {
     dayOfWeek: row.day_of_week,
     startTime: wallClock(row.start_time),
     endTime: wallClock(row.end_time),
+    hostName: row.host_name,
     // UI hanya menampilkan WIB (design.md §8.7); kolom timezone disimpan untuk
     // kebutuhan lain di luar MVP.
     timezone: STATION_TZ,

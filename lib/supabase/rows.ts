@@ -11,7 +11,6 @@ export interface ProgramRow {
   slug: string;
   description: string;
   cover_image_url: string;
-  host_name: string;
   is_active: boolean;
   is_published: boolean;
   created_at: string;
@@ -24,6 +23,7 @@ export interface ScheduleRow {
   day_of_week: number;
   start_time: string;
   end_time: string;
+  host_name: string;
   timezone: string;
   is_active: boolean;
 }

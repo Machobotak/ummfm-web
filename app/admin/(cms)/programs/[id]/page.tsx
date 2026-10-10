@@ -35,7 +35,6 @@ export default async function EditProgramPage({ params }: { params: Promise<{ id
             slug: program.slug,
             description: program.description,
             coverImageUrl: program.coverImageUrl,
-            hostName: program.hostName,
             isActive: program.isActive,
             isPublished: program.isPublished,
           }}

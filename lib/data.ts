@@ -22,7 +22,6 @@ export const mockPrograms: Program[] = [
     slug: "semesta-pagi",
     description: "Program pagi penyemangat hari.",
     coverImageUrl: "",
-    hostName: "Host A",
     isActive: true,
     isPublished: true,
     createdAt: "2026-08-01T08:00:00+07:00",
@@ -34,7 +33,6 @@ export const mockPrograms: Program[] = [
     slug: "kapsul-musik",
     description: "Kurasi lagu pilihan.",
     coverImageUrl: "",
-    hostName: "Host B",
     isActive: true,
     isPublished: true,
     createdAt: "2026-08-01T08:00:00+07:00",
@@ -46,7 +44,6 @@ export const mockPrograms: Program[] = [
     slug: "update-kampus",
     description: "Info dan kabar kampus UMM.",
     coverImageUrl: "",
-    hostName: "Host C",
     isActive: true,
     isPublished: true,
     createdAt: "2026-08-01T08:00:00+07:00",
@@ -58,7 +55,6 @@ export const mockPrograms: Program[] = [
     slug: "ngobrol-sore",
     description: "Bincang santai sore hari.",
     coverImageUrl: "",
-    hostName: "Host D",
     isActive: true,
     isPublished: true,
     createdAt: "2026-08-01T08:00:00+07:00",
@@ -70,7 +66,6 @@ export const mockPrograms: Program[] = [
     slug: "kolase-indie",
     description: "Musik indie lokal dan nasional.",
     coverImageUrl: "",
-    hostName: "Host E",
     isActive: true,
     isPublished: true,
     createdAt: "2026-08-01T08:00:00+07:00",
@@ -82,7 +77,6 @@ export const mockPrograms: Program[] = [
     slug: "gelombang-malam",
     description: "Teman begadang lintas tengah malam.",
     coverImageUrl: "",
-    hostName: "Host F",
     isActive: true,
     isPublished: true,
     createdAt: "2026-08-01T08:00:00+07:00",
@@ -96,6 +90,7 @@ function weekdayRows(
   programId: string,
   startTime: string,
   endTime: string,
+  hostName: string,
 ): ProgramSchedule[] {
   return WEEKDAYS.map((dayOfWeek) => ({
     id: `${programId}-d${dayOfWeek}`,
@@ -103,16 +98,17 @@ function weekdayRows(
     dayOfWeek,
     startTime,
     endTime,
+    hostName,
     timezone: "Asia/Jakarta" as const,
     isActive: true,
   }));
 }
 
 export const mockSchedules: ProgramSchedule[] = [
-  ...weekdayRows("prog-1", "06:00", "09:00"),
-  ...weekdayRows("prog-2", "09:00", "12:00"),
-  ...weekdayRows("prog-3", "12:00", "15:00"),
-  ...weekdayRows("prog-4", "15:00", "18:00"),
+  ...weekdayRows("prog-1", "06:00", "09:00", "Host A"),
+  ...weekdayRows("prog-2", "09:00", "12:00", "Host B"),
+  ...weekdayRows("prog-3", "12:00", "15:00", "Host C"),
+  ...weekdayRows("prog-4", "15:00", "18:00", "Host D"),
   // Sabtu 18:00–21:00
   {
     id: "prog-5-d6",
@@ -120,6 +116,7 @@ export const mockSchedules: ProgramSchedule[] = [
     dayOfWeek: 6,
     startTime: "18:00",
     endTime: "21:00",
+    hostName: "Host E",
     timezone: "Asia/Jakarta",
     isActive: true,
   },
@@ -130,6 +127,7 @@ export const mockSchedules: ProgramSchedule[] = [
     dayOfWeek: 5,
     startTime: "22:00",
     endTime: "01:00",
+    hostName: "Host F",
     timezone: "Asia/Jakarta",
     isActive: true,
   },
@@ -139,6 +137,7 @@ export const mockSchedules: ProgramSchedule[] = [
     dayOfWeek: 6,
     startTime: "22:00",
     endTime: "01:00",
+    hostName: "Host F",
     timezone: "Asia/Jakarta",
     isActive: true,
   },
@@ -306,6 +305,7 @@ export const mockEvents: RadioEvent[] = [
 
 export const mockSiteSettings: SiteSettings = {
   tagline: "The Real Campus Radio",
+  heroBannerUrl: "",
   contactEmail: "ummfm@gmail.com",
   socialLinks: [
     {

@@ -28,11 +28,6 @@ const columns: Column<Program>[] = [
     ),
   },
   {
-    key: "hostName",
-    header: "Host",
-    render: (program) => <span className="text-ink-700">{program.hostName || "—"}</span>,
-  },
-  {
     key: "status",
     header: "Status",
     render: (program) => (
@@ -82,7 +77,7 @@ export default async function AdminProgramsPage() {
     <>
       <PageHeader
         title="Program"
-        description="Kelola program 93.4 UMMFM: nama, penyiar, dan status tayangnya."
+        description="Kelola program 93.4 UMMFM: nama, sampul, dan status tayangnya. Penyiar diatur per slot di menu Jadwal."
         action={
           <Link href="/admin/programs/new" className={buttonClass("primary")}>
             Tambah program
