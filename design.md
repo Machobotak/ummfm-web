@@ -200,13 +200,16 @@ Layout:
 - Subheadline singkat tentang radio kampus UMMFM.
 - CTA utama: “Dengarkan Live”.
 - CTA sekunder: “Lihat Program”.
-- Gunakan satu aset visual utama: banner dari CMS (Pengaturan → banner hero, lanskap 16:9 atau
-  lebih lebar). Pilih foto atau artwork dengan area tenang; hindari teks atau logo besar di dalam
-  banner karena teks hero ditumpuk di atasnya.
+- Gunakan satu aset visual utama: banner dari CMS (Pengaturan → banner hero) dengan rasio lanskap
+  sekitar 12:5, misalnya 2048×853. Pilih foto atau artwork dengan area tenang; hindari teks atau
+  logo besar di dalam banner karena teks hero ditumpuk di atasnya.
 - Banner tampil sebagai latar penuh hero (full-bleed, tepi ke tepi) dengan teks hero di atasnya,
   bukan sebagai kartu terpisah.
 - Lapisan gelap `ink-950` minimal 70% menutup banner supaya teks putih tetap kontras untuk banner
   apa pun; banner tetap terlihat sebagai tekstur di belakangnya.
+- Di desktop (≥1024 px) tinggi hero mengikuti lebar dengan rasio 12:5 dan dibatasi `max-h-[86vh]`,
+  sehingga banner lanskap tampil utuh, bukan terpotong jadi strip; di bawah itu hero memakai
+  `min-h-[360px]`.
 - Tanpa banner, hero satu kolom dengan latar `brand-50` dan teks `ink-950`.
 
 Hindari:
@@ -471,7 +474,7 @@ Hindari menyalin struktur dan styling kartu yang sama ke banyak file; gunakan ko
 
 | Jenis aset | Rasio | Catatan |
 |---|---|---|
-| Hero visual | 16:9 atau fleksibel | Hindari teks penting yang terpotong |
+| Hero visual | 12:5 (mis. 2048×853) | Di desktop tinggi hero mengikuti lebar; rasio lain dipotong di sisi terpanjang |
 | Cover program | 4:5 atau 3:4 | Cocok untuk artwork poster program |
 | Cover playlist | 1:1 | Cocok untuk album/playlist |
 | Thumbnail berita | 16:9 | Konsisten di grid berita |

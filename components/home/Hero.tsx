@@ -61,7 +61,7 @@ export function Hero({ bannerUrl }: { bannerUrl: string }) {
   }
 
   return (
-    <section className="relative isolate flex min-h-[360px] items-center overflow-hidden border-b border-border bg-ink-950 lg:min-h-[520px]">
+    <section className="relative isolate flex min-h-[360px] items-center overflow-hidden border-b border-border bg-ink-950 lg:aspect-[12/5] lg:max-h-[86vh] lg:min-h-[520px]">
       <Image src={bannerUrl} alt="" fill priority sizes="100vw" className="-z-10 object-cover" />
       {/* Lapisan gelap minimal 70% supaya teks putih tetap kontras di atas banner apa pun. */}
       <div className="absolute inset-0 -z-10 bg-ink-950/70" aria-hidden />
