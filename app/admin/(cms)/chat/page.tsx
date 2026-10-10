@@ -4,6 +4,7 @@ import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
 import { DataTable, type Column } from "@/components/admin/DataTable";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { SubmitButton } from "@/components/admin/SubmitButton";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { deleteLiveMessage, setLiveMessageHidden } from "@/lib/actions/live-chat";
 import { listLiveMessages } from "@/lib/admin/data";
 import { formatDate, formatTime } from "@/lib/format";
@@ -76,9 +77,25 @@ const columns: Column<LiveMessage>[] = [
   },
 ];
 
+/** PostgREST membalas objek { code, message }, jadi jangan asumsikan Error biasa. */
+function readErrorText(error: unknown): string {
+  if (error && typeof error === "object" && "message" in error) {
+    return String(error.message);
+  }
+
+  return "Penyebabnya tidak diketahui.";
+}
+
 export default async function AdminChatPage() {
   await connection();
-  const messages = await listLiveMessages();
+
+  let messages: LiveMessage[] = [];
+  let loadError = "";
+  try {
+    messages = await listLiveMessages();
+  } catch (error) {
+    loadError = readErrorText(error);
+  }
 
   return (
     <>
@@ -86,13 +103,20 @@ export default async function AdminChatPage() {
         title="Live Chat"
         description="Komentar pendengar dari halaman publik. Pesan yang disembunyikan langsung hilang dari Home."
       />
-      <DataTable
-        columns={columns}
-        rows={messages}
-        rowKey={(message) => message.id}
-        emptyTitle="Belum ada pesan chat"
-        emptyDescription="Pesan yang dikirim pendengar lewat Home akan muncul di sini."
-      />
+      {loadError ? (
+        <EmptyState
+          title="Daftar chat gagal dibaca"
+          description={`${loadError}. Jalankan supabase/migrations/0002_live_messages.sql di SQL Editor Supabase, lalu muat ulang halaman ini.`}
+        />
+      ) : (
+        <DataTable
+          columns={columns}
+          rows={messages}
+          rowKey={(message) => message.id}
+          emptyTitle="Belum ada pesan chat"
+          emptyDescription="Pesan yang dikirim pendengar lewat Home akan muncul di sini."
+        />
+      )}
     </>
   );
 }
