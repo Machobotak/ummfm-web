@@ -23,6 +23,9 @@ create table if not exists public.live_chat_limits (
 alter table public.live_messages  enable row level security;
 alter table public.live_chat_limits enable row level security;
 
+drop policy if exists "public read visible messages" on public.live_messages;
+drop policy if exists "staff manage messages" on public.live_messages;
+
 create policy "public read visible messages" on public.live_messages
   for select using (is_hidden = false);
 create policy "staff manage messages" on public.live_messages
