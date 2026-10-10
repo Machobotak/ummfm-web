@@ -113,7 +113,8 @@ export function LiveRadioPlayer({
           </p>
           {activeProgram ? (
             <p className="mt-2 text-ink-700">
-              {activeProgram.hostName} · {activeProgram.timeRange}
+              {activeProgram.hostName ? `${activeProgram.hostName} · ` : ""}
+              {activeProgram.timeRange}
             </p>
           ) : (
             <p className="mt-2 text-ink-700">
