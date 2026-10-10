@@ -15,7 +15,7 @@ export default async function AdminSettingsPage() {
     <>
       <PageHeader
         title="Pengaturan"
-        description="Identitas situs, banner hero, media sosial, konten Tentang, dan SEO yang tampil di situs publik."
+        description="Identitas situs, banner hero, embed UMMFM on Music's, media sosial, konten Tentang, dan SEO yang tampil di situs publik."
       />
       <SettingsForm initial={settings} fallbackStreamUrl={STREAM_URL} media={media} />
     </>

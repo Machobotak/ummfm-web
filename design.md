@@ -412,6 +412,8 @@ Panduan:
 - Tombol utama: “Simpan Draft” atau “Publikasikan”.
 - Tindakan hapus memerlukan konfirmasi.
 - Berikan feedback setelah simpan berhasil/gagal.
+- Halaman Pengaturan punya tombol Simpan di kaki setiap kartu; satu klik menyimpan seluruh form,
+  halaman tetap di posisi kartu itu, dan muncul konfirmasi “Tersimpan.”.
 
 ### 8.6 Media Library
 

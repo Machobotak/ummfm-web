@@ -1,7 +1,6 @@
 "use server";
 
 import { updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth";
 import { CACHE_TAGS } from "@/lib/cache-tags";
@@ -104,6 +103,8 @@ export async function saveSettings(
   const { error } = await getAdmin().from("site_settings").upsert(rows, { onConflict: "key" });
   if (error) return { ok: false, errors: databaseErrors(error) };
 
+  // Tanpa redirect: form tetap di posisi pengguna, dan kartu yang disimpan
+  // menampilkan konfirmasi "Tersimpan." begitu action selesai.
   updateTag(CACHE_TAGS.siteSettings);
-  redirect("/admin/settings");
+  return { ok: true };
 }

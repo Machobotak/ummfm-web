@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useState } from "react";
+import { useFormStatus } from "react-dom";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { EMPTY_ACTION_RESULT } from "@/lib/actions/result";
 import { saveSettings } from "@/lib/actions/settings";
@@ -10,6 +11,32 @@ import { buttonClass } from "./buttonClass";
 import { FormField, inputClass } from "./FormField";
 import { ImagePicker } from "./ImagePicker";
 import { SubmitButton } from "./SubmitButton";
+
+type SectionId = "identitas" | "music" | "social" | "about" | "seo";
+
+/** Konfirmasi setelah action selesai — tidak tampil selama masih menyimpan. */
+function SaveNotice({ visible }: { visible: boolean }) {
+  const { pending } = useFormStatus();
+  if (!visible || pending) return null;
+  return (
+    <p role="status" className="text-sm font-semibold text-success">
+      Tersimpan.
+    </p>
+  );
+}
+
+/**
+ * Kaki kartu: tombol simpan di tiap bagian, jadi pengelola tidak perlu
+ * menggulir sampai bawah halaman. Semua tombol mengirim form yang sama.
+ */
+function SectionSave({ visible, onSave }: { visible: boolean; onSave: () => void }) {
+  return (
+    <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
+      <SubmitButton label="Simpan" variant="secondary" onClick={onSave} />
+      <SaveNotice visible={visible} />
+    </div>
+  );
+}
 
 interface SocialLinkRow {
   platform: string;
@@ -39,6 +66,7 @@ export function SettingsForm({
 }) {
   const [state, formAction] = useActionState(saveSettings, EMPTY_ACTION_RESULT);
   const errors = state.ok ? {} : state.errors;
+  const [savedSection, setSavedSection] = useState<SectionId | null>(null);
 
   const [socialLinks, setSocialLinks] = useState<SocialLinkRow[]>(
     initial.socialLinks.length > 0 ? initial.socialLinks : [EMPTY_SOCIAL_LINK],
@@ -127,6 +155,10 @@ export function SettingsForm({
             className={inputClass(errors.streamUrl)}
           />
         </FormField>
+        <SectionSave
+          visible={state.ok && savedSection === "identitas"}
+          onSave={() => setSavedSection("identitas")}
+        />
       </section>
 
       <section className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5">
@@ -169,6 +201,10 @@ export function SettingsForm({
             className={inputClass(errors.chartEmbeds)}
           />
         </FormField>
+        <SectionSave
+          visible={state.ok && savedSection === "music"}
+          onSave={() => setSavedSection("music")}
+        />
       </section>
 
       <section className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5">
@@ -271,6 +307,10 @@ export function SettingsForm({
             </fieldset>
           );
         })}
+        <SectionSave
+          visible={state.ok && savedSection === "social"}
+          onSave={() => setSavedSection("social")}
+        />
       </section>
 
       <section className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5">
@@ -371,6 +411,10 @@ export function SettingsForm({
             );
           })}
         </div>
+        <SectionSave
+          visible={state.ok && savedSection === "about"}
+          onSave={() => setSavedSection("about")}
+        />
       </section>
 
       <section className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5">
@@ -408,6 +452,10 @@ export function SettingsForm({
             className={inputClass(errors.seoDescription)}
           />
         </FormField>
+        <SectionSave
+          visible={state.ok && savedSection === "seo"}
+          onSave={() => setSavedSection("seo")}
+        />
       </section>
 
       <div className="flex flex-wrap gap-2">
