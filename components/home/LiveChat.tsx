@@ -9,6 +9,7 @@ import {
   LIVE_CHAT_MAX_BODY,
   LIVE_CHAT_MAX_NAME,
   LIVE_CHAT_POLL_MS,
+  type LiveChatResult,
 } from "@/lib/live-chat";
 import type { LiveMessage } from "@/lib/types";
 
@@ -21,12 +22,41 @@ const SUBMIT_CLASS =
 /** Batas bawah dianggap "menempel": di bawah ini pembaca masih ikut pesan terakhir. */
 const STICK_THRESHOLD_PX = 80;
 
-async function fetchMessages(): Promise<LiveMessage[] | null> {
-  const response = await fetch("/api/live-chat", { cache: "no-store" });
-  if (!response.ok) return null;
+function isLiveMessage(value: unknown): value is LiveMessage {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    typeof value.id === "string" &&
+    "name" in value &&
+    typeof value.name === "string" &&
+    "body" in value &&
+    typeof value.body === "string" &&
+    "isHidden" in value &&
+    typeof value.isHidden === "boolean" &&
+    "createdAt" in value &&
+    typeof value.createdAt === "string"
+  );
+}
 
-  const payload = (await response.json()) as { messages: LiveMessage[] };
-  return payload.messages;
+/**
+ * Baca balasan polling. Semua kegagalan (jaringan putus, bukan JSON, bentuk tak
+ * dikenal) jadi `null` supaya daftar yang sedang tampil tidak diganti.
+ */
+async function fetchMessages(): Promise<LiveMessage[] | null> {
+  try {
+    const response = await fetch("/api/live-chat", { cache: "no-store" });
+    if (!response.ok) return null;
+
+    const payload: unknown = await response.json();
+    if (typeof payload !== "object" || payload === null || !("messages" in payload)) return null;
+    if (!Array.isArray(payload.messages)) return null;
+
+    const messages = payload.messages.filter(isLiveMessage);
+    return messages.length === payload.messages.length ? messages : null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -69,7 +99,14 @@ export function LiveChat({
 
   function submit(formData: FormData) {
     startTransition(async () => {
-      const result = await postLiveMessage(EMPTY_LIVE_CHAT_RESULT, formData);
+      let result: LiveChatResult;
+      try {
+        result = await postLiveMessage(EMPTY_LIVE_CHAT_RESULT, formData);
+      } catch {
+        setErrors({ form: "Pesan gagal dikirim. Coba lagi." });
+        return;
+      }
+
       if (!result.ok) {
         setErrors(result.errors);
         return;

@@ -71,7 +71,10 @@ export async function postLiveMessage(
       .select("posted_at")
       .eq("ip_hash", ipHash)
       .maybeSingle();
-    const postedAt = (data as { posted_at: string } | null)?.posted_at;
+    const postedAt =
+      data && typeof data === "object" && "posted_at" in data && typeof data.posted_at === "string"
+        ? data.posted_at
+        : null;
 
     if (postedAt) {
       const elapsed = Date.now() - new Date(postedAt).getTime();
